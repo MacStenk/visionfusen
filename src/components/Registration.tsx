@@ -74,12 +74,21 @@ export default function Registration() {
           npub_hex: keyPair.npubHex,
         },
       },
+      profile: {
+        bio: '',
+        website: '',
+        lightning: '',
+        links: [],
+        fediverse: '',
+        xmpp: '',
+      },
       progress: {
         accountCreated: true,
         keysSaved: true,
         firstPost: false,
         firstMessage: false,
         invitedSomeone: false,
+        profileCompleted: false,
       },
     };
 

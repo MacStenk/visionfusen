@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getUser, updateProgress, exportUserData, clearUser, type UserData } from '../lib/storage';
+import ProfileEditor from './ProfileEditor';
 
 export default function Dashboard() {
   const [user, setUser] = useState<UserData | null>(null);
@@ -18,6 +19,7 @@ export default function Dashboard() {
 
   const [showInvite, setShowInvite] = useState(false);
   const [inviteCopied, setInviteCopied] = useState(false);
+  const [showProfileEditor, setShowProfileEditor] = useState(false);
 
   const handleProgressUpdate = (key: keyof UserData['progress']) => {
     updateProgress(key, true);
@@ -140,6 +142,20 @@ export default function Dashboard() {
           </div>
 
           <div className="identity-actions">
+            <button 
+              type="button" 
+              className="btn-secondary"
+              onClick={() => setShowProfileEditor(true)}
+            >
+              ✏️ Profil bearbeiten
+            </button>
+            <a 
+              href={`/profil/${user.user.username}`}
+              className="btn-secondary"
+              target="_blank"
+            >
+              👤 Profilseite ansehen
+            </a>
             <button 
               type="button" 
               className="btn-secondary"
@@ -278,6 +294,17 @@ export default function Dashboard() {
           </button>
         </div>
       </section>
+
+      {/* Profile Editor Modal */}
+      {showProfileEditor && (
+        <ProfileEditor 
+          onClose={() => setShowProfileEditor(false)}
+          onSave={() => {
+            setUser(getUser());
+            setShowProfileEditor(false);
+          }}
+        />
+      )}
 
       {/* Invite Modal */}
       {showInvite && (

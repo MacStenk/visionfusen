@@ -1,0 +1,304 @@
+---
+import Base from '../../layouts/Base.astro';
+import PublicProfile from '../../components/PublicProfile';
+
+const { username } = Astro.params;
+---
+
+<Base title={`${username} – Visionfusen`}>
+  <div class="page-profile">
+    <nav class="nav-minimal">
+      <a href="/" class="logo">
+        <span class="logo-mark">◈</span>
+        <span>Visionfusen</span>
+      </a>
+    </nav>
+
+    <main class="profile-container">
+      <PublicProfile client:load username={username!} />
+    </main>
+  </div>
+</Base>
+
+<style>
+  .page-profile {
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-minimal {
+    padding: 1.5rem 2rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+    color: var(--white);
+  }
+
+  .logo-mark {
+    color: var(--orange);
+    font-size: 1.5rem;
+  }
+
+  .profile-container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* Profile Loading & Not Found */
+  :global(.profile-loading),
+  :global(.profile-not-found) {
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  :global(.not-found-icon) {
+    font-size: 4rem;
+    color: var(--gray-dark);
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.profile-not-found h1) {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.75rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  :global(.profile-not-found p) {
+    color: var(--gray);
+    margin-bottom: 2rem;
+  }
+
+  /* Public Profile */
+  :global(.public-profile) {
+    background: var(--gray-light);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  :global(.profile-header) {
+    text-align: center;
+    padding: 3rem 2rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  :global(.profile-avatar) {
+    font-size: 4rem;
+    color: var(--orange);
+    margin-bottom: 1rem;
+  }
+
+  :global(.profile-header h1) {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2.5rem;
+    color: var(--white);
+    margin-bottom: 0.25rem;
+  }
+
+  :global(.profile-handle) {
+    color: var(--orange);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  :global(.profile-bio) {
+    color: var(--gray);
+    font-size: 1rem;
+    max-width: 400px;
+    margin: 0 auto 1rem;
+    line-height: 1.6;
+  }
+
+  :global(.profile-member) {
+    font-size: 0.8rem;
+    color: var(--gray-dark);
+  }
+
+  /* Sections */
+  :global(.profile-identities),
+  :global(.profile-links),
+  :global(.profile-lightning) {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  :global(.profile-identities h2),
+  :global(.profile-links h2),
+  :global(.profile-lightning h2) {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gray);
+    margin-bottom: 1rem;
+  }
+
+  /* Identity Rows */
+  :global(.identity-row),
+  :global(.link-row),
+  :global(.lightning-row) {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  :global(.identity-row:hover),
+  :global(.link-row:hover),
+  :global(.lightning-row:hover) {
+    border-color: var(--orange);
+  }
+
+  :global(.identity-row.clickable),
+  :global(.lightning-row.clickable) {
+    cursor: pointer;
+  }
+
+  :global(.identity-icon),
+  :global(.link-icon),
+  :global(.lightning-icon) {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+  }
+
+  :global(.identity-info),
+  :global(.lightning-info) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  :global(.identity-label),
+  :global(.lightning-label) {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+  }
+
+  :global(.identity-value),
+  :global(.lightning-value) {
+    color: var(--white);
+    font-size: 0.95rem;
+  }
+
+  :global(.identity-value.npub) {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gray);
+  }
+
+  :global(.identity-action),
+  :global(.link-action),
+  :global(.lightning-action) {
+    color: var(--gray);
+    font-size: 0.9rem;
+  }
+
+  /* Link Rows */
+  :global(.link-row) {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  :global(.link-label) {
+    color: var(--white);
+    font-size: 0.95rem;
+  }
+
+  :global(.link-url) {
+    color: var(--gray-dark);
+    font-size: 0.8rem;
+    text-align: right;
+  }
+
+  /* Lightning */
+  :global(.lightning-action) {
+    background: var(--orange);
+    color: var(--black);
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+  }
+
+  /* Footer */
+  :global(.profile-footer) {
+    padding: 2rem;
+    text-align: center;
+  }
+
+  :global(.profile-footer p) {
+    color: var(--gray);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  :global(.profile-footer a) {
+    color: var(--orange);
+  }
+
+  :global(.btn-join) {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: transparent;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  :global(.btn-join:hover) {
+    background: var(--orange);
+    color: var(--black);
+  }
+
+  :global(.btn-primary) {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--orange);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .profile-container {
+      padding: 1rem;
+    }
+
+    :global(.profile-header) {
+      padding: 2rem 1.5rem;
+    }
+
+    :global(.link-row) {
+      grid-template-columns: 40px 1fr auto;
+    }
+
+    :global(.link-url) {
+      display: none;
+    }
+  }
+</style>
