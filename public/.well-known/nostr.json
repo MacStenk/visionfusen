@@ -1,0 +1,12 @@
+{
+  "names": {
+    "steven": "DEIN_NPUB_ALS_HEX"
+  },
+  "relays": {
+    "DEIN_NPUB_ALS_HEX": [
+      "wss://relay.visionfusen.org",
+      "wss://relay.damus.io",
+      "wss://nos.lol"
+    ]
+  }
+}

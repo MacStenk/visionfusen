@@ -10,6 +10,11 @@
 /favicon.svg
   Content-Type: image/svg+xml
 
+# NIP-05 Nostr Verification (CORS required!)
+/.well-known/nostr.json
+  Content-Type: application/json
+  Access-Control-Allow-Origin: *
+
 # Security Headers
 /*
   X-Frame-Options: DENY
