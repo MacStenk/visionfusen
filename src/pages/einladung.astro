@@ -1,12 +1,9 @@
 ---
-export const prerender = false;
-
-import Base from '../../layouts/Base.astro';
-
-const { username } = Astro.params;
+import Base from '../layouts/Base.astro';
+import InvitePage from '../components/InvitePage';
 ---
 
-<Base title={`${username} lädt dich ein – Visionfusen`}>
+<Base title="Du wurdest eingeladen – Visionfusen">
   <div class="page-invite">
     <nav class="nav-minimal">
       <a href="/" class="logo">
@@ -16,48 +13,7 @@ const { username } = Astro.params;
     </nav>
 
     <main class="invite-container">
-      <div class="invite-card">
-        <div class="invite-icon">◈</div>
-        
-        <h1>Du wurdest eingeladen</h1>
-        
-        <p class="invite-from">
-          <strong>{username}</strong> möchte, dass du Teil von Visionfusen wirst.
-        </p>
-
-        <div class="invite-quote">
-          <p>Dekonditionierung. Für Mensch und Maschine.</p>
-        </div>
-
-        <p class="invite-text">
-          Visionfusen ist eine Gemeinschaft für Menschen, die ihre digitale 
-          Souveränität zurückgewinnen wollen. Keine Abhängigkeit von Plattformen. 
-          Echtes Eigentum an deiner Identität.
-        </p>
-
-        <div class="invite-benefits">
-          <div class="benefit">
-            <span class="benefit-icon">⚡</span>
-            <span>Deine Nostr-Identität</span>
-          </div>
-          <div class="benefit">
-            <span class="benefit-icon">🔑</span>
-            <span>Dein Private Key</span>
-          </div>
-          <div class="benefit">
-            <span class="benefit-icon">👥</span>
-            <span>Eine Community die hilft</span>
-          </div>
-        </div>
-
-        <a href="/registrieren" class="btn-primary">
-          Jetzt beitreten
-        </a>
-
-        <p class="invite-note">
-          Kostenlos. Keine Werbung. Deine Daten bleiben deine.
-        </p>
-      </div>
+      <InvitePage client:load />
     </main>
   </div>
 </Base>
@@ -93,14 +49,14 @@ const { username } = Astro.params;
     padding: 2rem;
   }
 
-  .invite-card {
+  :global(.invite-card) {
     background: var(--gray-light);
     border: 1px solid rgba(255,255,255,0.1);
     padding: 3rem 2.5rem;
     text-align: center;
   }
 
-  .invite-icon {
+  :global(.invite-icon) {
     font-size: 4rem;
     color: var(--orange);
     margin-bottom: 1.5rem;
@@ -112,45 +68,45 @@ const { username } = Astro.params;
     50% { opacity: 0.8; transform: scale(1.05); }
   }
 
-  h1 {
+  :global(.invite-card h1) {
     font-family: 'Instrument Serif', serif;
     font-size: 2rem;
     color: var(--white);
     margin-bottom: 1rem;
   }
 
-  .invite-from {
+  :global(.invite-from) {
     font-size: 1.1rem;
     color: var(--gray);
     margin-bottom: 2rem;
   }
 
-  .invite-from strong {
+  :global(.invite-from strong) {
     color: var(--orange);
   }
 
-  .invite-quote {
+  :global(.invite-quote) {
     border-left: 3px solid var(--orange);
     padding-left: 1.5rem;
     margin: 2rem 0;
     text-align: left;
   }
 
-  .invite-quote p {
+  :global(.invite-quote p) {
     font-family: 'Instrument Serif', serif;
     font-style: italic;
     font-size: 1.25rem;
     color: var(--white);
   }
 
-  .invite-text {
+  :global(.invite-text) {
     color: var(--gray);
     line-height: 1.8;
     margin-bottom: 2rem;
     text-align: left;
   }
 
-  .invite-benefits {
+  :global(.invite-benefits) {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -158,7 +114,7 @@ const { username } = Astro.params;
     text-align: left;
   }
 
-  .benefit {
+  :global(.benefit) {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -167,16 +123,16 @@ const { username } = Astro.params;
     border: 1px solid rgba(255,255,255,0.05);
   }
 
-  .benefit-icon {
+  :global(.benefit-icon) {
     font-size: 1.25rem;
   }
 
-  .benefit span:last-child {
+  :global(.benefit span:last-child) {
     color: var(--gray);
     font-size: 0.95rem;
   }
 
-  .btn-primary {
+  :global(.invite-card .btn-primary) {
     display: block;
     width: 100%;
     padding: 1rem;
@@ -193,17 +149,17 @@ const { username } = Astro.params;
     margin-bottom: 1rem;
   }
 
-  .btn-primary:hover {
+  :global(.invite-card .btn-primary:hover) {
     background: var(--orange-dark);
   }
 
-  .invite-note {
+  :global(.invite-note) {
     font-size: 0.8rem;
     color: var(--gray-dark);
   }
 
   @media (max-width: 600px) {
-    .invite-card {
+    :global(.invite-card) {
       padding: 2rem 1.5rem;
     }
   }

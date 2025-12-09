@@ -1,13 +1,9 @@
 ---
-export const prerender = false;
-
-import Base from '../../layouts/Base.astro';
-import PublicProfile from '../../components/PublicProfile';
-
-const { username } = Astro.params;
+import Base from '../layouts/Base.astro';
+import PublicProfile from '../components/PublicProfile';
 ---
 
-<Base title={`${username} – Visionfusen`}>
+<Base title="Profil – Visionfusen">
   <div class="page-profile">
     <nav class="nav-minimal">
       <a href="/" class="logo">
@@ -17,7 +13,7 @@ const { username } = Astro.params;
     </nav>
 
     <main class="profile-container">
-      <PublicProfile client:load username={username!} />
+      <PublicProfile client:load />
     </main>
   </div>
 </Base>

@@ -11,22 +11,27 @@ interface ProfileData {
   memberSince: string;
 }
 
-interface Props {
-  username: string;
-}
-
-export default function PublicProfile({ username }: Props) {
+export default function PublicProfile() {
+  const [username, setUsername] = useState<string | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
+    // Get username from hash: /profil#steven
+    const hash = window.location.hash.slice(1);
+    if (!hash) {
+      setNotFound(true);
+      return;
+    }
+    setUsername(hash);
+
     // Check localStorage for this user
     const stored = localStorage.getItem('visionfusen_user');
     if (stored) {
       try {
         const data = JSON.parse(stored);
-        if (data.user?.username === username) {
+        if (data.user?.username === hash) {
           setProfile({
             username: data.user.username,
             npub: data.identity.nostr.npub,
@@ -44,7 +49,7 @@ export default function PublicProfile({ username }: Props) {
       }
     }
     setNotFound(true);
-  }, [username]);
+  }, []);
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -64,7 +69,7 @@ export default function PublicProfile({ username }: Props) {
       <div className="profile-not-found">
         <div className="not-found-icon">◈</div>
         <h1>Profil nicht gefunden</h1>
-        <p>Das Profil <strong>{username}@visionfusen.org</strong> existiert nicht oder ist nicht öffentlich.</p>
+        <p>Das Profil existiert nicht oder ist nicht öffentlich.</p>
         <a href="/registrieren" className="btn-primary">Selbst beitreten</a>
       </div>
     );

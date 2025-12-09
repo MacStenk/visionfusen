@@ -53,7 +53,7 @@ export default function Dashboard() {
   };
 
   const getInviteLink = () => {
-    return `https://visionfusen.org/einladung/${user?.user.username}`;
+    return `https://visionfusen.org/einladung#${user?.user.username}`;
   };
 
   const getInviteText = () => {
@@ -150,7 +150,7 @@ export default function Dashboard() {
               ✏️ Profil bearbeiten
             </button>
             <a 
-              href={`/profil/${user.user.username}`}
+              href={`/profil#${user.user.username}`}
               className="btn-secondary"
               target="_blank"
             >
