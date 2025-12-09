@@ -179,6 +179,7 @@
   },
   "active": "2abc0057c31d692e",
   "lastOpenFiles": [
+    "public/_headers",
     "node_modules/sitemap/node_modules/@types/node/timers/promises.d.ts",
     "node_modules/sitemap/node_modules/@types/node/stream/web.d.ts",
     "node_modules/sitemap/node_modules/@types/node/stream/promises.d.ts",
@@ -189,7 +190,6 @@
     "node_modules/sitemap/node_modules/@types/node/zlib.d.ts",
     "node_modules/sitemap/node_modules/@types/node/worker_threads.d.ts",
     "node_modules/sitemap/node_modules/@types/node/wasi.d.ts",
-    "node_modules/sitemap/node_modules/@types/node/vm.d.ts",
     "node_modules/sitemap/node_modules/@types/node/README.md",
     "node_modules/sitemap/api.md",
     "node_modules/sitemap/README.md",

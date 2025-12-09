@@ -1,0 +1,17 @@
+# Robots.txt - must be text/plain
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+
+# LLMs.txt - must be text/plain
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+# SVG Favicon
+/favicon.svg
+  Content-Type: image/svg+xml
+
+# Security Headers
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
