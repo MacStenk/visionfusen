@@ -1,0 +1,90 @@
+# Visionfusen
+
+> Dekonditionierung. Für Mensch und Maschine.
+
+## About
+
+Visionfusen ist eine Gemeinschaft für digitale Souveränität. Wir helfen Menschen, ihre digitale Unabhängigkeit zurückzugewinnen – durch Self-Hosting, offene Protokolle und gegenseitige Unterstützung.
+
+## Core Concept
+
+**Dekonditionierung** – Wir wurden konditioniert, abhängig zu sein. Von Plattformen, die kontrollieren was sichtbar wird. Von Geschäftsmodellen, die uns ausbrennen. Visionfusen bietet den Ausweg.
+
+## Mission
+
+Den Einstieg in digitale Unabhängigkeit erleichtern. Den Schlüssel liefern, nicht das Abo. Das Ziel ist Autonomie – wir machen uns selbst überflüssig.
+
+## Key Topics
+
+- Digitale Souveränität
+- Self-Hosting
+- Offene Protokolle (ActivityPub, Nostr, Matrix, XMPP)
+- Fediverse
+- Dezentralisierung
+- Privacy
+- Open Source
+
+## Protocols We Support
+
+### Social
+- ActivityPub (Mastodon, WriteFreely)
+- Nostr
+- AT Protocol (Bluesky)
+
+### Communication
+- Email (SMTP)
+- XMPP
+- Matrix
+- WebRTC
+
+### Publishing
+- RSS
+- Git
+- WebMention
+
+### Identity
+- DNS
+- Webfinger
+- PGP/GPG
+
+### Storage
+- IPFS
+- Solid
+
+### Payments
+- Lightning Network
+
+## Target Audience
+
+Menschen, die:
+- Ihre digitale Existenz selbst gestalten wollen
+- Von zentralen Plattformen unabhängig werden möchten
+- Wert auf Privacy und Datensouveränität legen
+- Gemeinschaft statt Isolation suchen
+
+## Philosophy
+
+"Das Problem ist nicht das Angebot. Das Problem ist der Einstieg."
+
+Wir kritisieren Systeme, nicht Menschen. Wir bauen Strukturen, in denen Freiheit möglich ist.
+
+## Contact
+
+- Website: https://visionfusen.org
+- Email: hallo@visionfusen.org
+- Lightning: steven@stevennoack.de
+- Fediverse: @steven@fediverse.stevennoack.de
+
+## Language
+
+German (de-DE)
+
+## Founded
+
+2024
+
+## Founder
+
+Steven Noack
+- https://stevennoack.de
+- https://codeback.de
