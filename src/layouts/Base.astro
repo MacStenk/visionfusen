@@ -1,0 +1,209 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dekonditionierung. Für Mensch und Maschine. Wir wurden konditioniert, abhängig zu sein – technisch und gesellschaftlich. Hier beginnt der Reset." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <title>{title}</title>
+  </head>
+  <body>
+    <canvas id="particles"></canvas>
+    <div class="grain"></div>
+    <slot />
+    <script>
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+
+      let particles = [];
+      const particleCount = 60;
+      const connectionDistance = 120;
+      const mouseRadius = 150;
+
+      let mouse = { x: null, y: null };
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function createParticles() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            size: Math.random() * 2 + 1,
+            opacity: Math.random() * 0.5 + 0.2
+          });
+        }
+      }
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < connectionDistance) {
+              const opacity = (1 - distance / connectionDistance) * 0.15;
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(255, 107, 53, ${opacity})`;
+              ctx.lineWidth = 0.5;
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 107, 53, ${p.opacity})`;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 107, 53, ${p.opacity * 0.2})`;
+          ctx.fill();
+        });
+      }
+
+      function updateParticles() {
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (mouse.x && mouse.y) {
+            const dx = mouse.x - p.x;
+            const dy = mouse.y - p.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < mouseRadius) {
+              const force = (mouseRadius - distance) / mouseRadius;
+              p.vx -= (dx / distance) * force * 0.02;
+              p.vy -= (dy / distance) * force * 0.02;
+            }
+          }
+
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+          const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (speed > 0.5) {
+            p.vx = (p.vx / speed) * 0.5;
+            p.vy = (p.vy / speed) * 0.5;
+          }
+        });
+      }
+
+      function animate() {
+        updateParticles();
+        drawParticles();
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+        createParticles();
+      });
+
+      window.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      resize();
+      createParticles();
+      animate();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --black: #0a0a0a;
+    --white: #fafafa;
+    --orange: #ff6b35;
+    --orange-dark: #e85a2a;
+    --gray: #888;
+    --gray-dark: #666;
+    --gray-light: #1a1a1a;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Space Mono', monospace;
+    background: var(--black);
+    color: var(--white);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--orange);
+    color: var(--black);
+  }
+
+  #particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .grain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+</style>
