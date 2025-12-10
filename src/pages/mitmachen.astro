@@ -1,0 +1,310 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Mitmachen – Visionfusen">
+  <div class="page-join">
+    <nav class="nav-minimal">
+      <a href="/" class="logo">
+        <span class="logo-mark">◈</span>
+        <span>Visionfusen</span>
+      </a>
+    </nav>
+
+    <main class="join-container">
+      <div class="join-card">
+        <h1>Teil werden</h1>
+        
+        <p class="join-intro">
+          Visionfusen ist eine kuratierte Gemeinschaft. Wir prüfen, wer beitritt – 
+          nicht aus Elitismus, sondern um einen Raum ohne Trolle und Spam zu schaffen.
+        </p>
+
+        <div class="join-options">
+          <div class="join-option">
+            <div class="option-icon">✉️</div>
+            <h2>Mit Einladung</h2>
+            <p>Du wurdest von einem Mitglied eingeladen und hast einen Einladungs-Link erhalten.</p>
+            
+            <div class="token-input-group">
+              <label for="invite-token">Einladungs-Code</label>
+              <input 
+                type="text" 
+                id="invite-token" 
+                placeholder="z.B. ABC123XYZ"
+                maxlength="20"
+              />
+              <button type="button" class="btn-primary" id="btn-use-invite">
+                Einladung einlösen
+              </button>
+            </div>
+          </div>
+
+          <div class="divider">
+            <span>oder</span>
+          </div>
+
+          <div class="join-option">
+            <div class="option-icon">📝</div>
+            <h2>Ohne Einladung</h2>
+            <p>Du kennst noch niemanden hier? Kein Problem. Bewirb dich und erzähl uns, warum du dabei sein möchtest.</p>
+            
+            <a href="/bewerben" class="btn-secondary">
+              Bewerbung starten
+            </a>
+            
+            <p class="option-note">
+              Bewerbungen werden manuell geprüft. Das kann ein paar Tage dauern.
+            </p>
+          </div>
+        </div>
+
+        <div class="join-footer">
+          <p>Schon Mitglied? <a href="/login">Anmelden</a></p>
+        </div>
+      </div>
+    </main>
+  </div>
+</Base>
+
+<script>
+  const tokenInput = document.getElementById('invite-token') as HTMLInputElement;
+  const useInviteBtn = document.getElementById('btn-use-invite');
+
+  useInviteBtn?.addEventListener('click', () => {
+    const token = tokenInput?.value.trim();
+    if (token && token.length >= 6) {
+      window.location.href = `/einladung/${token}`;
+    } else {
+      tokenInput?.classList.add('error');
+      tokenInput?.focus();
+    }
+  });
+
+  tokenInput?.addEventListener('input', () => {
+    tokenInput.classList.remove('error');
+  });
+
+  tokenInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      useInviteBtn?.click();
+    }
+  });
+</script>
+
+<style>
+  .page-join {
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-minimal {
+    padding: 1.5rem 2rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+    color: var(--white);
+  }
+
+  .logo-mark {
+    color: var(--orange);
+    font-size: 1.5rem;
+  }
+
+  .join-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .join-card {
+    background: var(--gray-light);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 3rem 2.5rem;
+  }
+
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2.5rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .join-intro {
+    color: var(--gray);
+    text-align: center;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    font-size: 1.05rem;
+  }
+
+  .join-options {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .join-option {
+    padding: 2rem;
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .option-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .join-option h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+
+  .join-option > p {
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .token-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .token-input-group label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+  }
+
+  .token-input-group input {
+    padding: 0.875rem 1rem;
+    background: var(--gray-light);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    text-align: center;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .token-input-group input:focus {
+    outline: none;
+    border-color: var(--orange);
+  }
+
+  .token-input-group input.error {
+    border-color: #ff6b6b;
+    animation: shake 0.3s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--orange-dark);
+  }
+
+  .btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    color: var(--orange);
+    border: 2px solid var(--orange);
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 107, 53, 0.1);
+  }
+
+  .option-note {
+    font-size: 0.85rem;
+    color: var(--gray-dark);
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--gray-dark);
+    font-size: 0.9rem;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .join-footer {
+    margin-top: 2.5rem;
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .join-footer p {
+    color: var(--gray);
+    font-size: 0.95rem;
+  }
+
+  .join-footer a {
+    color: var(--orange);
+    text-decoration: none;
+  }
+
+  .join-footer a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .join-card {
+      padding: 2rem 1.5rem;
+    }
+
+    .join-option {
+      padding: 1.5rem;
+    }
+  }
+</style>

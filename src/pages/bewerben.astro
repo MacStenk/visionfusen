@@ -1,0 +1,297 @@
+---
+import Base from '../layouts/Base.astro';
+import ApplicationForm from '../components/ApplicationForm';
+---
+
+<Base title="Bewerbung – Visionfusen">
+  <div class="page-apply">
+    <nav class="nav-minimal">
+      <a href="/" class="logo">
+        <span class="logo-mark">◈</span>
+        <span>Visionfusen</span>
+      </a>
+    </nav>
+
+    <main class="apply-container">
+      <ApplicationForm client:load />
+    </main>
+  </div>
+</Base>
+
+<style>
+  .page-apply {
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-minimal {
+    padding: 1.5rem 2rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+    color: var(--white);
+  }
+
+  .logo-mark {
+    color: var(--orange);
+    font-size: 1.5rem;
+  }
+
+  .apply-container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* Application Form Styles */
+  :global(.application-form) {
+    background: var(--gray-light);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2.5rem;
+    border-radius: 4px;
+  }
+
+  :global(.application-form h1) {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--white);
+  }
+
+  :global(.form-intro) {
+    color: var(--gray);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  :global(.input-group) {
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.input-group label) {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.input-group input),
+  :global(.input-group textarea) {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  :global(.input-group textarea) {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  :global(.input-group input:focus),
+  :global(.input-group textarea:focus) {
+    outline: none;
+    border-color: var(--orange);
+  }
+
+  :global(.input-with-suffix) {
+    display: flex;
+  }
+
+  :global(.input-with-suffix input) {
+    flex: 1;
+    border-right: none;
+  }
+
+  :global(.input-suffix) {
+    padding: 0.875rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-left: none;
+    color: var(--gray);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  :global(.input-hint) {
+    font-size: 0.75rem;
+    color: var(--gray-dark);
+    margin-top: 0.5rem;
+  }
+
+  :global(.input-optional) {
+    font-size: 0.7rem;
+    color: var(--gray-dark);
+    margin-left: 0.5rem;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  :global(.error-message) {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  :global(.btn-primary) {
+    width: 100%;
+    padding: 1rem;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  :global(.btn-primary:hover) {
+    background: var(--orange-dark);
+  }
+
+  :global(.btn-primary:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  :global(.identity-choice) {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.identity-option) {
+    flex: 1;
+    padding: 1rem;
+    background: var(--black);
+    border: 2px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  :global(.identity-option:hover) {
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  :global(.identity-option.selected) {
+    border-color: var(--orange);
+    background: rgba(255, 107, 53, 0.1);
+  }
+
+  :global(.identity-option input) {
+    display: none;
+  }
+
+  :global(.identity-option span) {
+    display: block;
+    color: var(--gray);
+    font-size: 0.9rem;
+  }
+
+  :global(.identity-option strong) {
+    display: block;
+    color: var(--white);
+    margin-bottom: 0.25rem;
+  }
+
+  /* Success State */
+  :global(.success-card) {
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  :global(.success-icon) {
+    font-size: 4rem;
+    color: var(--orange);
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.success-card h2) {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.75rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  :global(.success-card p) {
+    color: var(--gray);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  :global(.status-box) {
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  :global(.status-box strong) {
+    color: var(--orange);
+  }
+
+  :global(.btn-secondary) {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: var(--gray);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    text-decoration: none;
+    margin-top: 1rem;
+    transition: all 0.2s;
+  }
+
+  :global(.btn-secondary:hover) {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+
+  @media (max-width: 600px) {
+    .apply-container {
+      padding: 1rem;
+    }
+
+    :global(.application-form) {
+      padding: 1.5rem;
+    }
+
+    :global(.identity-choice) {
+      flex-direction: column;
+    }
+
+    :global(.input-with-suffix) {
+      flex-direction: column;
+    }
+
+    :global(.input-with-suffix input) {
+      border-right: 1px solid rgba(255,255,255,0.2);
+      border-bottom: none;
+    }
+
+    :global(.input-suffix) {
+      border-left: 1px solid rgba(255,255,255,0.2);
+      border-top: none;
+      text-align: center;
+    }
+  }
+</style>
