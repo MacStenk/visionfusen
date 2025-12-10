@@ -1,8 +1,8 @@
 // Seed und Key Utilities für Visionfusen
 // Verwendet BIP39 für 12-Wort-Seed und leitet Nostr-Keys daraus ab
 
-import { wordlist } from '@scure/bip39/wordlists/english';
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from '@scure/bip39';
+import { wordlist } from '@scure/bip39/wordlists/english.js';
 import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 import { sha256 } from '@noble/hashes/sha256';
 
@@ -92,13 +92,13 @@ export async function decryptData(encryptedData: string, password: string): Prom
 
 // Generiert Backup-Datei Inhalt
 export function generateBackupFile(
-  username: string, 
+  username: string,
   seed: string,
-  nsec: string, 
+  nsec: string,
   npub: string
 ): string {
   const now = new Date().toLocaleString('de-DE');
-  
+
   return `VISIONFUSEN BACKUP - GEHEIM AUFBEWAHREN!
 ==========================================
 
