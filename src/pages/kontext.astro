@@ -1,0 +1,359 @@
+---
+import Base from '../layouts/Base.astro';
+import ContextEditor from '../components/ContextEditor';
+
+export const prerender = false;
+---
+
+<Base title="Dein Kontext – Visionfusen">
+  <div class="page-context">
+    <nav class="nav-minimal">
+      <a href="/" class="logo">
+        <span class="logo-mark">◈</span>
+        <span>Visionfusen</span>
+      </a>
+      <a href="/dashboard" class="nav-link">← Dashboard</a>
+    </nav>
+
+    <main class="context-container">
+      <ContextEditor client:load />
+    </main>
+  </div>
+</Base>
+
+<style>
+  .page-context {
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-minimal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+    color: var(--white);
+  }
+
+  .logo-mark {
+    color: var(--orange);
+    font-size: 1.5rem;
+  }
+
+  .nav-link {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .nav-link:hover {
+    color: var(--orange);
+  }
+
+  .context-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* Editor Styles */
+  :global(.context-editor) {
+    background: var(--gray-light);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  :global(.editor-header) {
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  :global(.editor-header h1) {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.editor-intro) {
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* Tabs */
+  :global(.editor-tabs) {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    overflow-x: auto;
+  }
+
+  :global(.editor-tabs .tab) {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: var(--gray);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  :global(.editor-tabs .tab:hover) {
+    color: var(--white);
+    background: rgba(255,255,255,0.05);
+  }
+
+  :global(.editor-tabs .tab.active) {
+    color: var(--orange);
+    border-bottom-color: var(--orange);
+  }
+
+  /* Content */
+  :global(.editor-content) {
+    padding: 2rem;
+  }
+
+  :global(.tab-panel) {
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  :global(.tab-hint) {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid var(--orange);
+  }
+
+  /* Form Groups */
+  :global(.form-group) {
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.form-group label) {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.form-group input),
+  :global(.form-group select),
+  :global(.form-group textarea) {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+  }
+
+  :global(.form-group textarea) {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  :global(.form-group input:focus),
+  :global(.form-group select:focus),
+  :global(.form-group textarea:focus) {
+    outline: none;
+    border-color: var(--orange);
+  }
+
+  :global(.form-group input::placeholder),
+  :global(.form-group textarea::placeholder) {
+    color: var(--gray-dark);
+  }
+
+  :global(.form-group select) {
+    cursor: pointer;
+  }
+
+  :global(.form-row) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  /* Preview */
+  :global(.preview-panel) {
+    /* No extra styles needed */
+  }
+
+  :global(.preview-header h3) {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.25rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.preview-header p) {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.preview-content) {
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--gray);
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  :global(.preview-actions) {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Footer */
+  :global(.editor-footer) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.2);
+  }
+
+  :global(.visibility-toggle) {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  :global(.visibility-toggle label) {
+    color: var(--gray);
+    font-size: 0.85rem;
+  }
+
+  :global(.toggle-buttons) {
+    display: flex;
+    gap: 0;
+  }
+
+  :global(.toggle-buttons button) {
+    padding: 0.5rem 1rem;
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--gray);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  :global(.toggle-buttons button:first-child) {
+    border-right: none;
+  }
+
+  :global(.toggle-buttons button:hover) {
+    background: rgba(255,255,255,0.05);
+  }
+
+  :global(.toggle-buttons button.active) {
+    background: var(--orange);
+    color: var(--black);
+    border-color: var(--orange);
+  }
+
+  /* Buttons */
+  :global(.btn-primary) {
+    padding: 1rem 2rem;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  :global(.btn-primary:hover:not(:disabled)) {
+    background: var(--orange-dark);
+  }
+
+  :global(.btn-primary:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  :global(.btn-secondary) {
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  :global(.btn-secondary:hover) {
+    background: rgba(255, 107, 53, 0.1);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .context-container {
+      padding: 1rem;
+    }
+
+    :global(.editor-header),
+    :global(.editor-content),
+    :global(.editor-footer) {
+      padding: 1.5rem;
+    }
+
+    :global(.editor-tabs .tab) {
+      padding: 0.75rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    :global(.form-row) {
+      grid-template-columns: 1fr;
+    }
+
+    :global(.editor-footer) {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    :global(.preview-actions) {
+      flex-direction: column;
+    }
+
+    :global(.btn-secondary) {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
