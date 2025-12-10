@@ -1,0 +1,240 @@
+---
+import Base from '../layouts/Base.astro';
+import CommunityFeed from '../components/CommunityFeed';
+---
+
+<Base title="Community – Visionfusen">
+  <div class="page-community">
+    <nav class="nav-community">
+      <a href="/" class="logo">
+        <span class="logo-mark">◈</span>
+        <span>Visionfusen</span>
+      </a>
+      <div class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/registrieren" class="nav-cta">Mitmachen</a>
+      </div>
+    </nav>
+
+    <main class="community-container">
+      <header class="community-hero">
+        <h1>Community</h1>
+        <p>Was die Visionfusen-Gemeinschaft bewegt.</p>
+      </header>
+
+      <CommunityFeed client:load />
+    </main>
+  </div>
+</Base>
+
+<style>
+  .page-community {
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-community {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+    color: var(--white);
+  }
+
+  .logo-mark {
+    color: var(--orange);
+    font-size: 1.5rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-size: 0.85rem;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--white);
+  }
+
+  .nav-cta {
+    background: var(--orange) !important;
+    color: var(--black) !important;
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+  }
+
+  .community-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .community-hero {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .community-hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 3rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .community-hero p {
+    color: var(--gray);
+    font-size: 1.1rem;
+  }
+
+  /* Community Feed Styles */
+  :global(.community-feed) {
+    background: var(--gray-light);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  :global(.community-header) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  :global(.community-stats) {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  :global(.stat) {
+    font-size: 0.8rem;
+    color: var(--gray);
+  }
+
+  :global(.community-feed .feed-loading),
+  :global(.community-feed .feed-error),
+  :global(.community-feed .feed-empty) {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--gray);
+  }
+
+  :global(.community-feed .loading-icon) {
+    font-size: 3rem;
+    color: var(--orange);
+    display: block;
+    margin-bottom: 1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+  }
+
+  :global(.community-posts) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.community-post) {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  :global(.community-post:last-child) {
+    border-bottom: none;
+  }
+
+  :global(.post-author) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.author-icon) {
+    color: var(--orange);
+    font-size: 1.25rem;
+  }
+
+  :global(.author-name) {
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  :global(.author-handle) {
+    color: var(--gray-dark);
+    font-size: 0.85rem;
+  }
+
+  :global(.community-post .post-content) {
+    color: var(--white);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 1.05rem;
+  }
+
+  :global(.community-post .post-time) {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--gray-dark);
+  }
+
+  :global(.community-feed .btn-refresh-small) {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--gray);
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  :global(.community-feed .btn-refresh-small:hover) {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+
+  :global(.community-feed .btn-refresh) {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .community-container {
+      padding: 1rem;
+    }
+
+    .community-hero h1 {
+      font-size: 2rem;
+    }
+
+    .nav-links {
+      gap: 1rem;
+    }
+  }
+</style>

@@ -199,6 +199,9 @@ export default function Dashboard() {
       <section className="dashboard-section">
         <h2>Deine Timeline</h2>
         <NostrFeed />
+        <a href="/community" className="btn-community">
+          🌐 Zur Community →
+        </a>
       </section>
 
       {/* Progress Section */}
