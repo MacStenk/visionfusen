@@ -1,20 +1,19 @@
 import { useState } from 'react';
 
 type IdentityType = 'realname' | 'pseudonym';
-type FormStep = 'form' | 'submitted';
+type FormStep = 'form' | 'submitting' | 'submitted' | 'error';
 
 export default function ApplicationForm() {
   const [step, setStep] = useState<FormStep>('form');
   const [identityType, setIdentityType] = useState<IdentityType>('realname');
   const [formData, setFormData] = useState({
     displayName: '',
-    realName: '', // Nur für Pseudonym-Option
+    realName: '',
     email: '',
     reason: '',
     website: '',
   });
   const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,31 +40,44 @@ export default function ApplicationForm() {
       return;
     }
 
-    setIsSubmitting(true);
+    setStep('submitting');
 
     try {
-      // TODO: API-Call zum Speichern der Bewerbung
-      // await fetch('/api/applications', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     ...formData,
-      //     identityType,
-      //     appliedAt: new Date().toISOString(),
-      //   }),
-      // });
+      // Sende an ntfy
+      const response = await fetch('https://ntfy.stevennoack.de/visionfusen-bewerbungen', {
+        method: 'POST',
+        headers: {
+          'Title': `Neue Bewerbung: ${formData.displayName}`,
+          'Priority': '4',
+          'Tags': 'bust_in_silhouette,sparkles',
+          'Actions': `view, Email öffnen, mailto:${formData.email}`
+        },
+        body: `📋 NEUE BEWERBUNG
 
-      // Simuliere API-Call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+👤 Name: ${formData.displayName}
+${identityType === 'pseudonym' ? `🔒 Echter Name: ${formData.realName}\n` : ''}📧 Email: ${formData.email}
+🏷️ Typ: ${identityType === 'realname' ? 'Klarname' : 'Pseudonym'}
+🔗 Website: ${formData.website || '-'}
 
-      setStep('submitted');
+💬 Warum Visionfusen:
+${formData.reason}
+
+---
+Gesendet: ${new Date().toLocaleString('de-DE')}`
+      });
+
+      if (response.ok) {
+        setStep('submitted');
+      } else {
+        throw new Error('Senden fehlgeschlagen');
+      }
     } catch (err) {
-      setError('Ein Fehler ist aufgetreten. Bitte versuche es später erneut.');
-    } finally {
-      setIsSubmitting(false);
+      setError('Ein Fehler ist aufgetreten. Bitte versuche es später erneut oder schreib direkt an hello@visionfusen.org');
+      setStep('error');
     }
   };
 
+  // Erfolgs-Ansicht
   if (step === 'submitted') {
     return (
       <div className="application-form">
@@ -97,6 +109,32 @@ export default function ApplicationForm() {
     );
   }
 
+  // Fehler-Ansicht
+  if (step === 'error') {
+    return (
+      <div className="application-form">
+        <div className="success-card">
+          <div className="success-icon">⚠️</div>
+          <h2>Etwas ist schiefgelaufen</h2>
+          <p>{error}</p>
+          
+          <button 
+            onClick={() => setStep('form')} 
+            className="btn-secondary"
+            style={{ marginRight: '1rem' }}
+          >
+            Nochmal versuchen
+          </button>
+          
+          <a href="mailto:hello@visionfusen.org" className="btn-secondary">
+            Email schreiben
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // Formular
   return (
     <div className="application-form">
       <h1>Bewerbung</h1>
@@ -240,9 +278,9 @@ export default function ApplicationForm() {
         <button 
           type="submit" 
           className="btn-primary"
-          disabled={isSubmitting}
+          disabled={step === 'submitting'}
         >
-          {isSubmitting ? 'Wird gesendet...' : 'Bewerbung absenden'}
+          {step === 'submitting' ? 'Wird gesendet...' : 'Bewerbung absenden'}
         </button>
       </form>
     </div>
