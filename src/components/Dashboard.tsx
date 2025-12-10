@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getUser, updateProgress, exportUserData, clearUser, type UserData } from '../lib/storage';
 import ProfileEditor from './ProfileEditor';
 import NostrPost from './NostrPost';
+import NostrFeed from './NostrFeed';
 
 export default function Dashboard() {
   const [user, setUser] = useState<UserData | null>(null);
@@ -192,6 +193,12 @@ export default function Dashboard() {
       <section className="dashboard-section">
         <h2>Posten</h2>
         <NostrPost />
+      </section>
+
+      {/* Nostr Feed Section */}
+      <section className="dashboard-section">
+        <h2>Deine Timeline</h2>
+        <NostrFeed />
       </section>
 
       {/* Progress Section */}

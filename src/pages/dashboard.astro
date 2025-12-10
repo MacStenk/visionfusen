@@ -760,6 +760,100 @@ import Dashboard from '../components/Dashboard';
     color: var(--orange);
   }
 
+  /* Nostr Feed */
+  :global(.nostr-feed) {
+    background: var(--gray-light);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 1.5rem;
+  }
+
+  :global(.feed-header) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  :global(.feed-header h3) {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.25rem;
+    color: var(--white);
+    margin: 0;
+  }
+
+  :global(.btn-refresh-small) {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--gray);
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  :global(.btn-refresh-small:hover) {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+
+  :global(.feed-loading),
+  :global(.feed-error),
+  :global(.feed-empty) {
+    text-align: center;
+    padding: 2rem;
+    color: var(--gray);
+  }
+
+  :global(.loading-icon) {
+    font-size: 2rem;
+    color: var(--orange);
+    display: block;
+    margin-bottom: 1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  :global(.btn-refresh) {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+  }
+
+  :global(.feed-empty-hint) {
+    font-size: 0.85rem;
+    color: var(--gray-dark);
+    margin-top: 0.5rem;
+  }
+
+  :global(.feed-posts) {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  :global(.feed-post) {
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 1rem;
+  }
+
+  :global(.post-content) {
+    color: var(--white);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  :global(.post-time) {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--gray-dark);
+  }
+
   /* Responsive */
   @media (max-width: 600px) {
     .dashboard-container {
