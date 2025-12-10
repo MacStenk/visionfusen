@@ -1,172 +1,185 @@
 import { useState } from 'react';
-import { generateKeyPair, encryptNsec } from '../lib/nostr';
-import { saveUser, type UserData } from '../lib/storage';
+import { 
+  generateSeed, 
+  seedToPrivateKey, 
+  encryptData, 
+  generateBackupFile,
+  downloadBackup 
+} from './seedUtils';
 
-type Step = 'username' | 'keys' | 'backup' | 'done';
+type Step = 'form' | 'warning' | 'seed' | 'complete';
 
-export default function Registration() {
-  const [step, setStep] = useState<Step>('username');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+interface FormData {
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface KeyData {
+  seed: string;
+  privateKeyHex: string;
+  publicKey: string;
+  nsec: string;
+  npub: string;
+}
+
+interface Props {
+  invitedBy?: string;
+  onComplete?: () => void;
+}
+
+export default function Registration({ invitedBy, onComplete }: Props) {
+  const [step, setStep] = useState<Step>('form');
+  const [formData, setFormData] = useState<FormData>({
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [keyData, setKeyData] = useState<KeyData | null>(null);
   const [error, setError] = useState('');
-  const [keyPair, setKeyPair] = useState<{
-    nsec: string;
-    npub: string;
-    npubHex: string;
-  } | null>(null);
-  const [backupConfirmed, setBackupConfirmed] = useState(false);
+  const [checkboxes, setCheckboxes] = useState({
+    written: false,
+    understood: false,
+  });
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleUsernameSubmit = async (e: React.FormEvent) => {
+  // Step 1: Form submission
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // Validate username
+    const username = formData.username.trim().toLowerCase();
+
     if (username.length < 3) {
       setError('Username muss mindestens 3 Zeichen haben');
       return;
     }
-    if (!/^[a-z0-9_]+$/.test(username)) {
-      setError('Nur Kleinbuchstaben, Zahlen und Unterstriche erlaubt');
+
+    if (!/^[a-z0-9_-]+$/.test(username)) {
+      setError('Username darf nur Kleinbuchstaben, Zahlen, - und _ enthalten');
       return;
     }
 
-    // Validate password
-    if (password.length < 8) {
+    if (formData.password.length < 8) {
       setError('Passwort muss mindestens 8 Zeichen haben');
       return;
     }
-    if (password !== passwordConfirm) {
+
+    if (formData.password !== formData.confirmPassword) {
       setError('Passwörter stimmen nicht überein');
       return;
     }
 
-    // Generate keys
-    const keys = generateKeyPair();
-    setKeyPair({
-      nsec: keys.nsec,
-      npub: keys.npub,
-      npubHex: keys.npubHex
-    });
+    setIsGenerating(true);
 
-    setStep('keys');
+    try {
+      // Generate seed and derive keys
+      const seed = generateSeed();
+      const privateKeyHex = seedToPrivateKey(seed);
+      
+      // Import nostr-tools for key conversion
+      const { getPublicKey, nip19 } = await import('nostr-tools');
+      const publicKey = getPublicKey(privateKeyHex);
+      
+      // Convert to bech32 format
+      const nsec = nip19.nsecEncode(privateKeyHex);
+      const npub = nip19.npubEncode(publicKey);
+
+      setKeyData({
+        seed,
+        privateKeyHex,
+        publicKey,
+        nsec,
+        npub,
+      });
+
+      // Move to warning step
+      setStep('warning');
+    } catch (err) {
+      setError('Fehler bei der Key-Generierung');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
-  const handleKeysConfirm = () => {
-    setStep('backup');
+  // Step 2: User acknowledges warning
+  const handleWarningContinue = () => {
+    setStep('seed');
   };
 
-  const handleBackupConfirm = async () => {
-    if (!keyPair || !backupConfirmed) return;
-
-    // Encrypt and save
-    const encryptedNsec = await encryptNsec(keyPair.nsec, password);
+  // Step 3: Download backup file
+  const handleDownloadBackup = () => {
+    if (!keyData) return;
     
-    const userData: UserData = {
-      user: {
-        username,
-        createdAt: new Date().toISOString(),
-      },
-      identity: {
-        nostr: {
-          npub: keyPair.npub,
-          nsec_encrypted: encryptedNsec,
-          npub_hex: keyPair.npubHex,
-        },
-      },
-      profile: {
-        bio: '',
-        website: '',
-        lightning: '',
-        links: [],
-        fediverse: '',
-        xmpp: '',
-      },
-      progress: {
-        accountCreated: true,
-        keysSaved: true,
-        firstPost: false,
-        firstMessage: false,
-        invitedSomeone: false,
-        profileCompleted: false,
-      },
-    };
-
-    saveUser(userData);
-    setStep('done');
-  };
-
-  const downloadBackup = () => {
-    if (!keyPair) return;
+    const content = generateBackupFile(
+      formData.username,
+      keyData.seed,
+      keyData.nsec,
+      keyData.npub
+    );
     
-    const backup = `VISIONFUSEN BACKUP - GEHEIM AUFBEWAHREN!
-==========================================
-
-Dein Username: ${username}@visionfusen.org
-
-Dein Nostr Private Key (nsec):
-${keyPair.nsec}
-
-Dein Nostr Public Key (npub):
-${keyPair.npub}
-
-WICHTIG:
-- Bewahre dieses Dokument sicher auf
-- Teile deinen Private Key (nsec) NIEMALS
-- Mit dem Private Key kann jeder als du handeln
-- Verlierst du ihn, verlierst du deine Identität
-
-Erstellt am: ${new Date().toLocaleString('de-DE')}
-`;
-
-    const blob = new Blob([backup], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `visionfusen-backup-${username}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBackup(content, formData.username);
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+  // Step 3: Complete registration
+  const handleComplete = async () => {
+    if (!keyData) return;
+    
+    setIsGenerating(true);
+    
+    try {
+      // Encrypt seed and private key with password
+      const encryptedSeed = await encryptData(keyData.seed, formData.password);
+      const encryptedKey = await encryptData(keyData.privateKeyHex, formData.password);
+
+      // Store in localStorage
+      localStorage.setItem('visionfusen_username', formData.username);
+      localStorage.setItem('nostr_encrypted_seed', encryptedSeed);
+      localStorage.setItem('nostr_encrypted_key', encryptedKey);
+      localStorage.setItem('nostr_pubkey', keyData.publicKey);
+      localStorage.setItem('nostr_session_active', 'true');
+
+      setStep('complete');
+
+      // Redirect after short delay
+      setTimeout(() => {
+        if (onComplete) {
+          onComplete();
+        } else {
+          window.location.href = '/dashboard';
+        }
+      }, 2000);
+
+    } catch (err) {
+      setError('Fehler beim Speichern');
+      setIsGenerating(false);
+    }
   };
 
-  return (
-    <div className="registration">
-      {/* Progress indicator */}
-      <div className="progress-steps">
-        <div className={`progress-step ${step === 'username' ? 'active' : ''} ${['keys', 'backup', 'done'].includes(step) ? 'completed' : ''}`}>
-          <span className="step-number">1</span>
-          <span className="step-label">Account</span>
-        </div>
-        <div className={`progress-step ${step === 'keys' ? 'active' : ''} ${['backup', 'done'].includes(step) ? 'completed' : ''}`}>
-          <span className="step-number">2</span>
-          <span className="step-label">Schlüssel</span>
-        </div>
-        <div className={`progress-step ${step === 'backup' ? 'active' : ''} ${step === 'done' ? 'completed' : ''}`}>
-          <span className="step-number">3</span>
-          <span className="step-label">Backup</span>
-        </div>
-      </div>
+  // STEP 1: Form
+  if (step === 'form') {
+    return (
+      <div className="registration">
+        <h1>Account erstellen</h1>
+        
+        {invitedBy && (
+          <p className="invited-by">
+            Eingeladen von <strong>{invitedBy}</strong>
+          </p>
+        )}
 
-      {/* Step 1: Username */}
-      {step === 'username' && (
-        <form onSubmit={handleUsernameSubmit} className="registration-form">
-          <h2>Werde Teil der Bewegung</h2>
-          <p className="form-intro">Wähle deinen Username. Er wird deine Identität im dezentralen Netz.</p>
-          
+        <form onSubmit={handleFormSubmit}>
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <div className="input-with-suffix">
               <input
                 type="text"
                 id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value.toLowerCase())}
-                placeholder="max"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                placeholder="deinname"
                 autoComplete="username"
-                required
+                disabled={isGenerating}
               />
               <span className="input-suffix">@visionfusen.org</span>
             </div>
@@ -177,135 +190,173 @@ Erstellt am: ${new Date().toLocaleString('de-DE')}
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               placeholder="Mindestens 8 Zeichen"
               autoComplete="new-password"
-              required
+              disabled={isGenerating}
             />
-            <p className="input-hint">Verschlüsselt deinen Private Key lokal</p>
           </div>
 
           <div className="input-group">
-            <label htmlFor="passwordConfirm">Passwort bestätigen</label>
+            <label htmlFor="confirmPassword">Passwort bestätigen</label>
             <input
               type="password"
-              id="passwordConfirm"
-              value={passwordConfirm}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
+              id="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
               placeholder="Passwort wiederholen"
               autoComplete="new-password"
-              required
+              disabled={isGenerating}
             />
           </div>
 
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error-message">{error}</p>}
 
-          <button type="submit" className="btn-primary">
-            Weiter
+          <button 
+            type="submit" 
+            className="btn-primary"
+            disabled={isGenerating}
+          >
+            {isGenerating ? 'Wird erstellt...' : 'Weiter'}
           </button>
         </form>
-      )}
+      </div>
+    );
+  }
 
-      {/* Step 2: Show Keys */}
-      {step === 'keys' && keyPair && (
-        <div className="keys-display">
-          <h2>Deine Schlüssel wurden erstellt</h2>
-          <p className="form-intro">
-            Diese Schlüssel sind deine Identität. Der Private Key ist wie ein Passwort – 
-            teile ihn <strong>niemals</strong>.
+  // STEP 2: Warning
+  if (step === 'warning') {
+    return (
+      <div className="registration">
+        <div className="warning-box">
+          <div className="warning-icon">⚠️</div>
+          
+          <h1>STOPP. LIES DAS.</h1>
+          
+          <p className="warning-lead">
+            Was du gleich siehst, siehst du nur einmal.
           </p>
 
-          <div className="key-box public">
-            <div className="key-header">
-              <span className="key-label">🔓 Public Key (npub)</span>
-              <span className="key-info">Darf geteilt werden</span>
-            </div>
-            <code className="key-value">{keyPair.npub}</code>
-            <button 
-              type="button" 
-              className="btn-copy"
-              onClick={() => copyToClipboard(keyPair.npub)}
-            >
-              Kopieren
-            </button>
+          <div className="warning-content">
+            <p>
+              Diese 12 Wörter <strong>SIND</strong> deine Identität.
+            </p>
+            <p>
+              Nicht eine Kopie. Nicht ein Backup.<br />
+              <strong>DER Schlüssel. Der einzige.</strong>
+            </p>
           </div>
 
-          <div className="key-box private">
-            <div className="key-header">
-              <span className="key-label">🔐 Private Key (nsec)</span>
-              <span className="key-info">GEHEIM HALTEN!</span>
-            </div>
-            <code className="key-value">{keyPair.nsec}</code>
-            <button 
-              type="button" 
-              className="btn-copy"
-              onClick={() => copyToClipboard(keyPair.nsec)}
-            >
-              Kopieren
-            </button>
+          <div className="warning-list">
+            <p>Wenn du ihn verlierst:</p>
+            <ul>
+              <li>Können wir nicht helfen.</li>
+              <li>Gibt es kein "Passwort zurücksetzen".</li>
+              <li>Ist dein Account weg. Für immer.</li>
+              <li>Sind deine Inhalte weg.</li>
+              <li>Sind deine Sats weg.</li>
+            </ul>
           </div>
 
-          <div className="warning-box">
-            <p>⚠️ <strong>Wichtig:</strong> Wer deinen Private Key hat, kann als du handeln. 
-            Bewahre ihn sicher auf – wie einen Haustürschlüssel.</p>
-          </div>
+          <p className="warning-physics">
+            Das ist keine Drohung. Das ist Physik.<br />
+            So funktioniert echte Souveränität.
+          </p>
 
-          <button type="button" className="btn-primary" onClick={handleKeysConfirm}>
-            Verstanden, weiter
+          <button 
+            className="btn-primary"
+            onClick={handleWarningContinue}
+          >
+            Ich verstehe. Wörter anzeigen.
           </button>
         </div>
-      )}
+      </div>
+    );
+  }
 
-      {/* Step 3: Backup */}
-      {step === 'backup' && keyPair && (
-        <div className="backup-step">
-          <h2>Sichere deine Schlüssel</h2>
-          <p className="form-intro">
-            Lade dein Backup herunter. Ohne dieses Backup kannst du deine Identität nicht wiederherstellen.
+  // STEP 3: Seed display
+  if (step === 'seed' && keyData) {
+    const words = keyData.seed.split(' ');
+    
+    return (
+      <div className="registration">
+        <div className="seed-box">
+          <h1>DEINE 12 WÖRTER</h1>
+          
+          <p className="seed-instruction">
+            Schreib sie auf Papier. Nicht digital.<br />
+            Papier kann nicht gehackt werden.
           </p>
 
-          <button type="button" className="btn-download" onClick={downloadBackup}>
-            📥 Backup herunterladen
-          </button>
-
-          <div className="checkbox-group">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={backupConfirmed}
-                onChange={(e) => setBackupConfirmed(e.target.checked)}
-              />
-              <span>Ich habe mein Backup sicher gespeichert</span>
-            </label>
+          <div className="seed-grid">
+            {words.map((word, index) => (
+              <div key={index} className="seed-word">
+                <span className="seed-number">{index + 1}.</span>
+                <span className="seed-text">{word}</span>
+              </div>
+            ))}
           </div>
 
           <button 
-            type="button" 
-            className="btn-primary" 
-            onClick={handleBackupConfirm}
-            disabled={!backupConfirmed}
+            className="btn-secondary btn-download"
+            onClick={handleDownloadBackup}
           >
-            Abschließen
+            📥 Zusätzlich: Backup-Datei herunterladen
+          </button>
+          <p className="download-hint">
+            Für schnellen Import auf neuem Gerät
+          </p>
+
+          <div className="seed-checkboxes">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={checkboxes.written}
+                onChange={(e) => setCheckboxes({ ...checkboxes, written: e.target.checked })}
+              />
+              <span>Ich habe die Wörter aufgeschrieben.</span>
+            </label>
+
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={checkboxes.understood}
+                onChange={(e) => setCheckboxes({ ...checkboxes, understood: e.target.checked })}
+              />
+              <span>Ich verstehe: Verloren = Weg.</span>
+            </label>
+          </div>
+
+          {error && <p className="error-message">{error}</p>}
+
+          <button 
+            className="btn-primary"
+            onClick={handleComplete}
+            disabled={!checkboxes.written || !checkboxes.understood || isGenerating}
+          >
+            {isGenerating ? 'Wird gespeichert...' : 'Weiter'}
           </button>
         </div>
-      )}
+      </div>
+    );
+  }
 
-      {/* Step 4: Done */}
-      {step === 'done' && (
-        <div className="done-step">
-          <div className="success-icon">◈</div>
-          <h2>Willkommen, {username}!</h2>
-          <p className="form-intro">
-            Du bist jetzt <strong>{username}@visionfusen.org</strong>
+  // STEP 4: Complete
+  if (step === 'complete') {
+    return (
+      <div className="registration">
+        <div className="complete-box">
+          <div className="complete-icon">✓</div>
+          <h1>Willkommen bei Visionfusen</h1>
+          <p>
+            Dein Account ist erstellt.<br />
+            Du wirst weitergeleitet...
           </p>
-          <p>Deine Reise zur digitalen Souveränität beginnt jetzt.</p>
-
-          <a href="/dashboard" className="btn-primary">
-            Zum Dashboard
-          </a>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  return null;
 }

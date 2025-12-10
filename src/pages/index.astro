@@ -1,5 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
+
+export const prerender = true;
 ---
 
 <Base title="Visionfusen – Dekonditionierung. Für Mensch und Maschine.">
@@ -13,7 +15,6 @@ import Base from "../layouts/Base.astro";
       <a href="#vision">Vision</a>
       <a href="#manifest">Manifest</a>
       <a href="#protokolle">Stack</a>
-      <a href="/community">Community</a>
       <a href="/mitmachen" class="nav-cta">Mitmachen</a>
     </div>
   </nav>
@@ -365,14 +366,96 @@ import Base from "../layouts/Base.astro";
     </div>
   </section>
 
+  <!-- Warum anders -->
+  <section class="section why-different">
+    <div class="container">
+      <h2>Warum Einladung?</h2>
+      <p>
+        Das Internet ist voll von Rauschen. Trolle, Bots, Wegwerf-Accounts. 
+        Niemand steht für das, was er sagt.
+      </p>
+      <p>
+        Bei Visionfusen ist das anders. Jedes Mitglied wurde eingeladen 
+        oder hat sich beworben. Jede Identität ist verifiziert – ob Klarname 
+        oder Pseudonym. Wer stört, fliegt raus.
+      </p>
+      <p class="closing">
+        Echte Menschen. Echte Gespräche. Kein Rauschen.
+      </p>
+    </div>
+  </section>
+
+  <!-- Kontext -->
+  <section class="section context">
+    <div class="container">
+      <h2>Kontext</h2>
+      <p>
+        Wir lesen Bücher, sammeln Erfahrungen, führen Gespräche – wir sammeln 
+        Kontext. Daraus entsteht Verständnis. Für uns selbst. Für andere.
+      </p>
+      <p>
+        Eine Maschine funktioniert genauso. Ohne Kontext: generische Antworten. 
+        Mit dem richtigen Kontext: echte Unterstützung.
+      </p>
+      <p class="quiet">
+        Dekonditionierung heißt auch: den falschen Kontext loslassen. 
+        Den richtigen bewusst wählen.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta">
+    <div class="container">
+      <a href="/mitmachen" class="cta-button">Mitmachen</a>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <a href="mailto:hallo@visionfusen.org">hallo@visionfusen.org</a>
+      <a href="mailto:hello@visionfusen.org">hello@visionfusen.org</a>
       <div class="footer-lightning">
         <span>⚡</span>
-        <code>steven@stevennoack.de</code>
+        <code>hello@visionfusen.org</code>
       </div>
     </div>
   </footer>
 </Base>
+
+<style>
+  /* Neue Sektionen Styling */
+  .why-different,
+  .context {
+    text-align: center;
+  }
+
+  .why-different p,
+  .context p {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
+  }
+
+  .cta {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background: var(--orange);
+    color: var(--black);
+    text-decoration: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+
+  .cta-button:hover {
+    background: var(--orange-dark);
+  }
+</style>
