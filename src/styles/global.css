@@ -658,10 +658,22 @@
 @media (max-width: 768px) {
   .nav {
     padding: 1rem 1.5rem;
+    background: var(--black);
+  }
+
+  .nav-links {
+    gap: 0;
   }
 
   .nav-links a:not(.nav-cta) {
     display: none;
+  }
+
+  .nav-cta {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    display: block;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .hero {
