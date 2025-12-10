@@ -183,6 +183,8 @@
   },
   "active": "2abc0057c31d692e",
   "lastOpenFiles": [
+    "astro.config.mjs",
+    "astro.config (1).mjs",
     "src/pages/kontext.astro",
     "src/components/ContextEditor.tsx",
     "src/components/PersonalContext.ts",
@@ -192,8 +194,6 @@
     "node_modules/@noble/hashes/src/webcrypto.ts",
     "node_modules/@noble/hashes/webcrypto.d.ts",
     "node_modules/@noble/hashes/src/sha2.ts",
-    "node_modules/@noble/hashes/sha2.d.ts",
-    "node_modules/@noble/hashes/src/legacy.ts",
     "node_modules/@scure/bip32/node_modules/@noble/hashes/README.md",
     "node_modules/@scure/bip32/node_modules/@noble/curves/node_modules/@noble/hashes/README.md",
     "node_modules/@scure/bip39/node_modules/@scure/base/README.md",

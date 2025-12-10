@@ -7,7 +7,7 @@ import cloudflare from '@astrojs/cloudflare';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://visionfusen.org',
-  output: 'server',  // ← Hier ändern
+  output: 'server',
   adapter: cloudflare(),
   integrations: [
     react(),
@@ -20,4 +20,19 @@ export default defineConfig({
       },
     }),
   ],
+  
+  vite: {
+    ssr: {
+      noExternal: [
+        '@noble/hashes',
+        '@noble/curves',
+        '@scure/bip39',
+        '@scure/base',
+        'nostr-tools'
+      ]
+    },
+    build: {
+      target: 'esnext'
+    }
+  }
 });
