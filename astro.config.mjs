@@ -7,7 +7,7 @@ import cloudflare from '@astrojs/cloudflare';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://visionfusen.org',
-  output: 'hybrid',
+  output: 'server',  // ← Hier ändern
   adapter: cloudflare(),
   integrations: [
     react(),
