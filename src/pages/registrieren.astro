@@ -344,4 +344,41 @@ import Registration from '../components/Registration';
   :global(.done-step .btn-primary) {
     margin-top: 1.5rem;
   }
+
+  /* Mobile Responsive */
+  @media (max-width: 500px) {
+    .registration-container {
+      padding: 1rem;
+    }
+
+    :global(.registration) {
+      padding: 1.5rem;
+    }
+
+    :global(.input-with-suffix) {
+      flex-direction: column;
+    }
+
+    :global(.input-with-suffix input) {
+      border-right: 1px solid rgba(255,255,255,0.2);
+      border-bottom: none;
+    }
+
+    :global(.input-suffix) {
+      border-left: 1px solid rgba(255,255,255,0.2);
+      border-top: none;
+      text-align: center;
+      padding: 0.75rem 1rem;
+    }
+
+    :global(.key-header) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+
+    :global(.key-value) {
+      font-size: 0.7rem;
+    }
+  }
 </style>
