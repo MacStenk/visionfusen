@@ -2,9 +2,9 @@
 // Verwendet BIP39 für 12-Wort-Seed und leitet Nostr-Keys daraus ab
 
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from '@scure/bip39';
-import { wordlist } from '@scure/bip39/wordlists/english.js';
-import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js';
-import { sha256 } from '@noble/hashes/sha256.js';
+import { wordlist } from '@scure/bip39/wordlists/english';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
+import { sha256 } from '@noble/hashes/sha256';
 
 // Generiert 12 Wörter (128 bit entropy)
 export function generateSeed(): string {
