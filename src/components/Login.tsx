@@ -138,7 +138,7 @@ export default function Login() {
       }
 
       // Derive keys from seed
-      const privateKeyHex = seedToPrivateKey(seed);
+      const privateKeyHex = await seedToPrivateKey(seed);
       
       const { getPublicKey, nip19 } = await import('nostr-tools');
       const pubkey = getPublicKey(privateKeyHex);

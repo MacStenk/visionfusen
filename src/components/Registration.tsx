@@ -75,7 +75,7 @@ export default function Registration({ invitedBy, onComplete }: Props) {
     try {
       // Generate seed and derive keys
       const seed = generateSeed();
-      const privateKeyHex = seedToPrivateKey(seed);
+      const privateKeyHex = await seedToPrivateKey(seed);
       
       // Import nostr-tools for key conversion
       const { getPublicKey, nip19 } = await import('nostr-tools');
