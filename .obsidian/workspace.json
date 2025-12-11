@@ -183,6 +183,7 @@
   },
   "active": "2abc0057c31d692e",
   "lastOpenFiles": [
+    "src/lib/bip39",
     "src/lib/crypto",
     "astro.config.mjs",
     "astro.config (1).mjs",
@@ -193,7 +194,6 @@
     "src/pages/registrieren.astro",
     "src/components/seedUtils.ts",
     "node_modules/@noble/hashes/src/webcrypto.ts",
-    "node_modules/@noble/hashes/webcrypto.d.ts",
     "node_modules/@scure/bip32/node_modules/@noble/hashes/README.md",
     "node_modules/@scure/bip32/node_modules/@noble/curves/node_modules/@noble/hashes/README.md",
     "node_modules/@scure/bip39/node_modules/@scure/base/README.md",
