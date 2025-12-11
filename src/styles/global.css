@@ -216,7 +216,7 @@
   margin-bottom: 1rem;
 }
 
-.vm-text {
+p.vm-text {
   font-family: 'Instrument Serif', serif;
   font-size: 1.35rem;
   color: var(--white);
