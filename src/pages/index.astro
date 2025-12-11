@@ -14,7 +14,7 @@ export const prerender = true;
     <div class="nav-links">
       <a href="#vision">Vision</a>
       <a href="#manifest">Manifest</a>
-      <a href="#protokolle">Stack</a>
+      <a href="#was">Was du bekommst</a>
       <a href="/mitmachen" class="nav-cta">Mitmachen</a>
     </div>
   </nav>
@@ -162,150 +162,40 @@ export const prerender = true;
     </div>
   </section>
 
-  <!-- Protocols -->
-  <section id="protokolle" class="section protocols">
+  <!-- Was du bekommst -->
+  <section id="was" class="section what-you-get">
     <div class="container">
-      <h2>Was es gibt</h2>
-      <p>
-        Diese Protokolle existieren. Sie funktionieren. Manche seit Jahrzehnten.
-      </p>
+      <h2>Was du bekommst</h2>
+      
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <span class="benefit-icon">◈</span>
+          <h3>Deine Identität</h3>
+          <p class="benefit-example">deinname@visionfusen.org</p>
+          <p>Ein kryptographischer Schlüssel, der dir gehört. Portabel zu jeder kompatiblen Plattform. Niemand kann ihn dir wegnehmen.</p>
+        </div>
 
-      <p class="protocol-category">Soziale Netzwerke</p>
-      <div class="protocol-list">
-        <div class="protocol-item">
-          <span class="protocol-name">ActivityPub</span>
-          <span class="protocol-desc"
-            >Das Fediverse. Mastodon, WriteFreely. Föderiert, offen.</span
-          >
+        <div class="benefit-card">
+          <span class="benefit-icon">⚡</span>
+          <h3>Echte Payments</h3>
+          <p class="benefit-example">Lightning-Wallet integriert</p>
+          <p>Sende und empfange Sats. Keine Bank, keine Gebühren, keine Genehmigung nötig. Micropayments, die funktionieren.</p>
         </div>
-        <div class="protocol-item">
-          <span class="protocol-name">Nostr</span>
-          <span class="protocol-desc"
-            >Radikal dezentral. Kryptographisch signiert.</span
-          >
+
+        <div class="benefit-card">
+          <span class="benefit-icon">👥</span>
+          <h3>Eine Community</h3>
+          <p class="benefit-example">Kuratiert, nicht algorithmisch</p>
+          <p>Menschen, die ähnlich denken. Einladung oder Bewerbung – kein Spam, keine Trolle, kein Rauschen.</p>
         </div>
-        <div class="protocol-item">
-          <span class="protocol-name">AT Protocol</span>
-          <span class="protocol-desc">Bluesky. Portable Identität.</span>
+
+        <div class="benefit-card">
+          <span class="benefit-icon">🚀</span>
+          <h3>Der Einstieg</h3>
+          <p class="benefit-example">Ohne eigenen Server</p>
+          <p>Du musst nichts selbst hosten. Fang hier an. Wer später seine eigene Infrastruktur will, bekommt Unterstützung.</p>
         </div>
       </div>
-
-      <p class="protocol-category">Kommunikation</p>
-      <div class="protocol-list">
-        <div class="protocol-item">
-          <span class="protocol-name">Email (SMTP)</span>
-          <span class="protocol-desc"
-            >Der OG. Dezentral seit den 70ern. Funktioniert immer noch.</span
-          >
-        </div>
-        <div class="protocol-item">
-          <span class="protocol-name">XMPP</span>
-          <span class="protocol-desc"
-            >Messaging seit 1999. Eigener Server möglich.</span
-          >
-        </div>
-        <div class="protocol-item">
-          <span class="protocol-name">Matrix</span>
-          <span class="protocol-desc"
-            >Moderne Kommunikation. Verschlüsselt, föderiert.</span
-          >
-        </div>
-        <div class="protocol-item">
-          <span class="protocol-name">WebRTC</span>
-          <span class="protocol-desc"
-            >P2P Video und Audio. Direkt im Browser.</span
-          >
-        </div>
-      </div>
-
-      <p class="protocol-category">Publishing & Content</p>
-      <div class="protocol-list">
-        <div class="protocol-item">
-          <span class="protocol-name">RSS</span>
-          <span class="protocol-desc"
-            >Der Klassiker. Einfach, robust, unsterblich.</span
-          >
-        </div>
-        <div class="protocol-item">
-          <span class="protocol-name">Git</span>
-          <span class="protocol-desc"
-            >Nicht nur für Code. Versionierte Texte, Bücher, Kurse.</span
-          >
-        </div>
-        <div class="protocol-item">
-          <span class="protocol-name">WebMention</span>
-          <span class="protocol-desc"
-            >Kommentare zwischen Websites. Ohne Plattform.</span
-          >
-        </div>
-      </div>
-
-      <p class="protocol-category">Identität</p>
-      <div class="protocol-list">
-        <div class="protocol-item">
-          <span class="protocol-name">DNS</span>
-          <span class="protocol-desc"
-            >Eigene Domain = digitale Souveränität. Die Basis von allem.</span
-          >
-        </div>
-        <div class="protocol-item">
-          <span class="protocol-name">Webfinger</span>
-          <span class="protocol-desc"
-            >So funktioniert @name@domain.de Discovery.</span
-          >
-        </div>
-        <div class="protocol-item">
-          <span class="protocol-name">PGP/GPG</span>
-          <span class="protocol-desc"
-            >Verschlüsselung und digitale Signaturen.</span
-          >
-        </div>
-      </div>
-
-      <p class="protocol-category">Speicher</p>
-      <div class="protocol-list">
-        <div class="protocol-item">
-          <span class="protocol-name">IPFS</span>
-          <span class="protocol-desc"
-            >Dezentraler Speicher. Content überlebt Server-Ausfälle.</span
-          >
-        </div>
-        <div class="protocol-item">
-          <span class="protocol-name">Solid</span>
-          <span class="protocol-desc"
-            >Tim Berners-Lees Vision. Deine Daten in deinem Pod.</span
-          >
-        </div>
-      </div>
-
-      <p class="protocol-category">Payments</p>
-      <div class="protocol-list">
-        <div class="protocol-item">
-          <span class="protocol-name">Lightning ⚡</span>
-          <span class="protocol-desc"
-            >Instant Payments. Keine Bank, keine Plattform-Gebühren.</span
-          >
-        </div>
-      </div>
-
-      <p class="note">
-        Das Problem ist nicht das Angebot. Das Problem ist der Einstieg.
-      </p>
-    </div>
-  </section>
-
-  <!-- Hurdle -->
-  <section class="section hurdle">
-    <div class="container">
-      <p class="hurdle-quote">
-        Lad dir Conversations runter, mach dir einen Account bei jabber.de, dann
-        können wir schreiben.
-      </p>
-      <p>Die meisten schließen an dieser Stelle die Seite.</p>
-      <p>
-        Und wer es alleine versucht – eigene Instanz, eigener Server – steht am
-        Ende vor einer leeren Timeline. Technisch unabhängig. Sozial isoliert.
-      </p>
     </div>
   </section>
 
@@ -424,7 +314,56 @@ export const prerender = true;
 </Base>
 
 <style>
-  /* Neue Sektionen Styling */
+  /* What you get */
+  .what-you-get {
+    text-align: center;
+  }
+
+  .what-you-get h2 {
+    margin-bottom: 2rem;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+    text-align: left;
+  }
+
+  .benefit-card {
+    background: var(--gray-light);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2rem;
+  }
+
+  .benefit-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .benefit-card h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .benefit-example {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--orange);
+    margin-bottom: 1rem;
+  }
+
+  .benefit-card > p:last-child {
+    color: var(--gray);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Existing styles */
   .why-different,
   .context {
     text-align: center;
@@ -457,5 +396,12 @@ export const prerender = true;
 
   .cta-button:hover {
     background: var(--orange-dark);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
