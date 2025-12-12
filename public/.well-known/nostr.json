@@ -1,13 +1,12 @@
 {
   "names": {
-    "steven": "bef829d0c3bb8c8ca46850399e02997223b11801f329e63be884bc4fece5c4c1"
+    "steven": "bef82750c377198ca4684170f00a65c88ec4600f9947cc77e8425e27ece38983"
   },
   "relays": {
-    "bef829d0c3bb8c8ca46850399e02997223b11801f329e63be884bc4fece5c4c1": [
-      "wss://relay.stevennoack.de",
-      "wss://relay.damus.io",
-      "wss://nos.lol",
-      "wss://relay.primal.net"
+    "bef82750c377198ca4684170f00a65c88ec4600f9947cc77e8425e27ece38983": [
+      "wss://relay.visionfusen.org",
+      "wss://relay.primal.net",
+      "wss://nos.lol"
     ]
   }
 }
