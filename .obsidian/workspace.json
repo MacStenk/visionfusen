@@ -183,6 +183,10 @@
   },
   "active": "2abc0057c31d692e",
   "lastOpenFiles": [
+    "docs/ideen/substack-autor-onboarding.md",
+    "docs/ideen/substack-to-nostr-bridge.md",
+    "docs/ideen/nostr-content-aggregator.md",
+    "docs/ideen",
     "src/lib/bip39",
     "src/lib/crypto",
     "astro.config.mjs",
@@ -192,8 +196,6 @@
     "src/components/PersonalContext.ts",
     "src/components/contextNostr.ts",
     "src/pages/registrieren.astro",
-    "src/components/seedUtils.ts",
-    "node_modules/@noble/hashes/src/webcrypto.ts",
     "node_modules/@scure/bip32/node_modules/@noble/hashes/README.md",
     "node_modules/@scure/bip32/node_modules/@noble/curves/node_modules/@noble/hashes/README.md",
     "node_modules/@scure/bip39/node_modules/@scure/base/README.md",
@@ -217,8 +219,6 @@
     "node_modules/undici/docs/docs/api/SnapshotAgent.md",
     "node_modules/undici/docs/docs/api/RetryHandler.md",
     "node_modules/undici/docs/docs/api/RetryAgent.md",
-    "node_modules/undici/docs/docs/api/RedirectHandler.md",
-    "node_modules/undici/docs/docs/api/ProxyAgent.md",
     "node_modules/@cloudflare/workers-types/entrypoints.svg"
   ]
 }
