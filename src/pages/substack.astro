@@ -473,7 +473,7 @@ export const prerender = true;
       </div>
 
       <div class="qr-container">
-        <div id="qrcode"></div>
+        <canvas id="qrcode"></canvas>
       </div>
 
       <details class="details-box">
@@ -524,7 +524,7 @@ export const prerender = true;
           </div>
         </div>
         <div class="qr-container">
-          <div id="existingQrcode"></div>
+          <canvas id="existingQrcode"></canvas>
         </div>
         <details class="details-box">
           <summary>Oder Link manuell kopieren</summary>
@@ -551,7 +551,7 @@ export const prerender = true;
   </footer>
 
   <!-- QR Code Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 
   <script>
     const API_URL = 'https://visionfusen-substackabos.stevennoack2015.workers.dev';
@@ -613,11 +613,11 @@ export const prerender = true;
             document.getElementById('existingLndhubUrl').textContent = data.lndhub_admin;
             document.getElementById('existingQrSection').style.display = 'block';
             document.getElementById('noQrHint').style.display = 'none';
-            if (typeof QRCode !== 'undefined') {
-              new QRCode(document.getElementById('existingQrcode'), {
-                text: data.lndhub_admin,
-                width: 240,
-                height: 240
+            if (typeof QRious !== 'undefined') {
+              new QRious({
+                element: document.getElementById('existingQrcode'),
+                value: data.lndhub_admin,
+                size: 240
               });
             }
           }
@@ -747,11 +747,11 @@ export const prerender = true;
         document.getElementById('lndhubUrl').textContent = data.lndhub_admin;
 
         // Generate QR Code
-        if (typeof QRCode !== 'undefined') {
-          new QRCode(document.getElementById('qrcode'), {
-            text: data.lndhub_admin,
-            width: 240,
-            height: 240
+        if (typeof QRious !== 'undefined') {
+          new QRious({
+            element: document.getElementById('qrcode'),
+            value: data.lndhub_admin,
+            size: 240
           });
         }
 
