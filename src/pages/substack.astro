@@ -769,13 +769,15 @@ export const prerender = true;
     });
 
     const existingCopyBtn = document.getElementById('existingCopyBtn');
-    existingCopyBtn.addEventListener('click', () => {
-      const url = document.getElementById('existingLndhubUrl').textContent;
-      navigator.clipboard.writeText(url).then(() => {
-        existingCopyBtn.textContent = 'Kopiert!';
-        setTimeout(() => { existingCopyBtn.textContent = 'In Zwischenablage kopieren'; }, 2000);
+    if (existingCopyBtn) {
+      existingCopyBtn.addEventListener('click', () => {
+        const url = document.getElementById('existingLndhubUrl').textContent;
+        navigator.clipboard.writeText(url).then(() => {
+          existingCopyBtn.textContent = 'Kopiert!';
+          setTimeout(() => { existingCopyBtn.textContent = 'In Zwischenablage kopieren'; }, 2000);
+        });
       });
-    });
+    }
 
     // Helpers
     function showStep(step) {
