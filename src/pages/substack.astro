@@ -1,0 +1,718 @@
+---
+export const prerender = true;
+---
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dein Lightning Wallet – VisionFusen</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 8rem !important;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-bottom: 3rem;
+    }
+
+    .container {
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .pretitle {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #999;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .intro {
+      color: #444;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .intro.subtle {
+      color: #888;
+      font-size: 0.9375rem;
+    }
+
+    .intro a {
+      color: #1a1a1a;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .divider {
+      height: 1px;
+      background: #eee;
+      margin: 1.5rem 0;
+    }
+
+    h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    /* Steps List */
+    .steps-list {
+      margin-bottom: 1.5rem;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-number {
+      width: 1.75rem;
+      height: 1.75rem;
+      background: #1a1a1a;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      padding-top: 0.125rem;
+    }
+
+    .step-content p {
+      font-size: 0.875rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+
+    .step-content a {
+      color: #1a1a1a;
+    }
+
+    /* Steps */
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    /* Form Elements */
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      color: #333;
+    }
+
+    .hint {
+      font-size: 0.8125rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #1a1a1a;
+    }
+
+    input.error {
+      border-color: #dc2626;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Messages */
+    .message {
+      padding: 0.875rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .message.success {
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+
+    .message.info {
+      background: #f8fafc;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Greeting */
+    .greeting {
+      font-size: 1.125rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Username Preview */
+    .username-preview {
+      font-size: 0.875rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .username-preview code {
+      background: #f5f5f5;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .username-status {
+      font-size: 0.75rem;
+      margin-top: -0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .username-status.available {
+      color: #16a34a;
+    }
+
+    .username-status.taken {
+      color: #dc2626;
+    }
+
+    /* Result */
+    .result-box {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #999;
+      margin-bottom: 0.25rem;
+    }
+
+    .result-value {
+      font-size: 1.125rem;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .result-value.large {
+      font-size: 1.375rem;
+      text-align: center;
+    }
+
+    .result-value.mono {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .result-box.highlight {
+      background: #1a1a1a;
+      border-color: #1a1a1a;
+    }
+
+    .result-box.highlight .result-value {
+      color: #fff;
+    }
+
+    .result-section {
+      margin-bottom: 1.25rem;
+    }
+
+    .result-section:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Details/Summary */
+    .details-box {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .details-box summary {
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .details-box[open] summary {
+      margin-bottom: 1rem;
+    }
+
+    /* QR Code */
+    .qr-container {
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+
+    .qr-container canvas {
+      border-radius: 8px;
+    }
+
+    .qr-hint {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: 0.5rem;
+    }
+
+    /* Copy Button */
+    .copy-btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      background: #fff;
+      color: #1a1a1a;
+      border: 1px solid #ddd;
+      margin-top: 0.5rem;
+    }
+
+    .copy-btn:hover {
+      background: #f5f5f5;
+    }
+
+    /* Loading */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: auto;
+      padding-top: 3rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #999;
+    }
+
+    .footer a {
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Step 1: E-Mail Verifizierung -->
+    <div id="step1" class="step active">
+      <p class="pretitle">Für Substack-Abonnenten</p>
+      <h1>Deine erste Lightning-Adresse</h1>
+      <p class="intro">
+        Ich schreibe viel über digitale Souveränität. Aber zwischen 
+        Lesen und Erleben liegt ein Unterschied. Deshalb bekommst du 
+        hier etwas zum Ausprobieren: deine eigene Lightning-Adresse.
+      </p>
+      <p class="intro">
+        Damit kannst du Zahlungen empfangen – weltweit, in Sekunden. 
+        Und <strong>100 Sats</strong> Startguthaben liegen schon für dich bereit.
+      </p>
+      <p class="intro subtle">
+        Warum ich das mache? Ich baue gerne Brücken zwischen Welten. 
+        Und ich lerne selbst durchs Machen. Win-win.
+      </p>
+
+      <div class="divider"></div>
+
+      <div id="error1" class="message error" style="display: none;"></div>
+
+      <label for="email">Deine E-Mail-Adresse</label>
+      <p class="hint">Die gleiche, mit der du meinen Substack abonniert hast.</p>
+      <input 
+        type="email" 
+        id="email" 
+        placeholder="deine@email.de"
+        autocomplete="email"
+      />
+      
+      <button id="verifyBtn" type="button">Weiter</button>
+    </div>
+
+    <!-- Step 2: Username wählen -->
+    <div id="step2" class="step">
+      <h1>Wie soll deine Adresse heißen?</h1>
+      <p class="intro">
+        Deine Lightning-Adresse funktioniert wie eine E-Mail-Adresse – 
+        nur für Geld. Wähle einen Namen, unter dem du erreichbar sein willst.
+      </p>
+
+      <div id="error2" class="message error" style="display: none;"></div>
+
+      <label for="username">Dein Username</label>
+      <input 
+        type="text" 
+        id="username" 
+        placeholder="deinname"
+        autocomplete="off"
+        pattern="[a-z0-9_-]+"
+      />
+      <p id="usernamePreview" class="username-preview"></p>
+      <p id="usernameStatus" class="username-status"></p>
+      
+      <button id="createBtn" type="button" disabled>Wallet erstellen</button>
+    </div>
+
+    <!-- Step 3: Ergebnis -->
+    <div id="step3" class="step">
+      <h1>Das ist deine Adresse</h1>
+      <p class="intro">
+        Ab jetzt kann dir jeder Mensch auf der Welt Geld schicken – 
+        weltweit, in Sekunden.
+      </p>
+      
+      <div class="result-box highlight">
+        <p id="lightningAddress" class="result-value large"></p>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2>So richtest du dein Wallet ein</h2>
+      
+      <div class="steps-list">
+        <div class="step-item">
+          <span class="step-number">1</span>
+          <div class="step-content">
+            <strong>BlueWallet herunterladen</strong>
+            <p>Kostenlos für <a href="https://apps.apple.com/app/bluewallet-bitcoin-wallet/id1376878040" target="_blank">iOS</a> und <a href="https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet" target="_blank">Android</a></p>
+          </div>
+        </div>
+        <div class="step-item">
+          <span class="step-number">2</span>
+          <div class="step-content">
+            <strong>Wallet importieren</strong>
+            <p>Nicht "Erstellen" – klicke auf <strong>"Importieren"</strong></p>
+          </div>
+        </div>
+        <div class="step-item">
+          <span class="step-number">3</span>
+          <div class="step-content">
+            <strong>QR-Code scannen oder Link einfügen</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="qr-container">
+        <canvas id="qrcode"></canvas>
+      </div>
+
+      <details class="details-box">
+        <summary>Oder Link manuell kopieren</summary>
+        <p class="result-value mono" id="lndhubUrl"></p>
+        <button id="copyBtn" class="copy-btn" type="button">In Zwischenablage kopieren</button>
+      </details>
+
+      <div class="message info">
+        <strong>Wichtig:</strong> Dieser Link ist dein Zugangsschlüssel. 
+        Speichere ihn sicher ab – wer ihn hat, hat Zugriff auf dein Wallet.
+      </div>
+    </div>
+
+    <!-- Already registered -->
+    <div id="stepRegistered" class="step">
+      <h1>Du hast bereits ein Wallet</h1>
+      <p class="intro">
+        Deine Lightning-Adresse ist aktiv:
+      </p>
+      <div class="result-box highlight">
+        <p id="existingAddress" class="result-value large"></p>
+      </div>
+      <p class="intro">
+        Öffne BlueWallet auf deinem Handy – dort findest du dein Wallet.
+      </p>
+      <p class="intro subtle">
+        Noch keine App? <a href="https://apps.apple.com/app/bluewallet-bitcoin-wallet/id1376878040" target="_blank">iOS</a> · <a href="https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet" target="_blank">Android</a>
+      </p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <a href="/">← zurück zu VisionFusen</a>
+  </footer>
+
+  <!-- QR Code Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+  <script>
+    const API_URL = 'https://visionfusen-substackabos.stevennoack2015.workers.dev';
+    
+    let currentEmail = '';
+    let usernameTimeout = null;
+
+    // Elements
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const stepRegistered = document.getElementById('stepRegistered');
+
+    const emailInput = document.getElementById('email');
+    const usernameInput = document.getElementById('username');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const createBtn = document.getElementById('createBtn');
+    const copyBtn = document.getElementById('copyBtn');
+
+    const error1 = document.getElementById('error1');
+    const error2 = document.getElementById('error2');
+    const usernamePreview = document.getElementById('usernamePreview');
+    const usernameStatus = document.getElementById('usernameStatus');
+
+    // Step 1: Verify Email
+    verifyBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim().toLowerCase();
+      
+      if (!email) {
+        showError(error1, 'Bitte gib deine E-Mail-Adresse ein.');
+        return;
+      }
+
+      verifyBtn.disabled = true;
+      verifyBtn.innerHTML = '<span class="loading"></span>Prüfe...';
+      hideError(error1);
+
+      try {
+        const res = await fetch(`${API_URL}/verify-email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+
+        if (!data.found) {
+          showError(error1, 'Diese E-Mail ist nicht hinterlegt. Nutze bitte die E-Mail-Adresse, mit der du meinen Substack abonniert hast.');
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = 'Weiter';
+          return;
+        }
+
+        if (data.already_registered) {
+          document.getElementById('existingAddress').textContent = `${data.username}@visionfusen.org`;
+          showStep(stepRegistered);
+          return;
+        }
+
+        // Success - go to step 2
+        currentEmail = email;
+        showStep(step2);
+
+      } catch (err) {
+        showError(error1, 'Verbindungsfehler. Bitte versuche es später noch einmal.');
+      }
+
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = 'Weiter';
+    });
+
+    // Username input - live check
+    usernameInput.addEventListener('input', () => {
+      const raw = usernameInput.value;
+      const normalized = raw.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+      
+      if (raw !== normalized) {
+        usernameInput.value = normalized;
+      }
+
+      if (normalized.length > 0) {
+        usernamePreview.innerHTML = `Deine Adresse: <code>${normalized}@visionfusen.org</code>`;
+      } else {
+        usernamePreview.textContent = '';
+      }
+
+      // Debounced availability check
+      clearTimeout(usernameTimeout);
+      usernameStatus.textContent = '';
+      createBtn.disabled = true;
+
+      if (normalized.length >= 3) {
+        usernameStatus.textContent = 'Prüfe...';
+        usernameStatus.className = 'username-status';
+        
+        usernameTimeout = setTimeout(() => checkUsername(normalized), 400);
+      }
+    });
+
+    async function checkUsername(username) {
+      try {
+        const res = await fetch(`${API_URL}/check-username/${username}`);
+        const data = await res.json();
+
+        if (data.available) {
+          usernameStatus.textContent = '✓ Verfügbar';
+          usernameStatus.className = 'username-status available';
+          createBtn.disabled = false;
+        } else {
+          usernameStatus.textContent = '✗ Bereits vergeben';
+          usernameStatus.className = 'username-status taken';
+          createBtn.disabled = true;
+        }
+      } catch (err) {
+        usernameStatus.textContent = 'Fehler bei der Prüfung';
+        usernameStatus.className = 'username-status';
+      }
+    }
+
+    // Step 2: Create Wallet
+    createBtn.addEventListener('click', async () => {
+      const username = usernameInput.value.trim().toLowerCase();
+      
+      if (username.length < 3) {
+        showError(error2, 'Username muss mindestens 3 Zeichen haben.');
+        return;
+      }
+
+      createBtn.disabled = true;
+      createBtn.innerHTML = '<span class="loading"></span>Erstelle Wallet...';
+      hideError(error2);
+
+      try {
+        const res = await fetch(`${API_URL}/create-wallet`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentEmail, username })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+          showError(error2, data.error || 'Wallet konnte nicht erstellt werden.');
+          createBtn.disabled = false;
+          createBtn.textContent = 'Wallet erstellen';
+          return;
+        }
+
+        // Success - show result
+        document.getElementById('lightningAddress').textContent = data.lightning_address;
+        document.getElementById('lndhubUrl').textContent = data.lndhub_admin;
+
+        // Generate QR Code
+        QRCode.toCanvas(
+          document.getElementById('qrcode'),
+          data.lndhub_admin,
+          { width: 240, margin: 2 },
+          (err) => { if (err) console.error(err); }
+        );
+
+        showStep(step3);
+
+      } catch (err) {
+        showError(error2, 'Verbindungsfehler. Bitte versuche es später noch einmal.');
+        createBtn.disabled = false;
+        createBtn.textContent = 'Wallet erstellen';
+      }
+    });
+
+    // Copy button
+    copyBtn.addEventListener('click', () => {
+      const url = document.getElementById('lndhubUrl').textContent;
+      navigator.clipboard.writeText(url).then(() => {
+        copyBtn.textContent = 'Kopiert!';
+        setTimeout(() => { copyBtn.textContent = 'Kopieren'; }, 2000);
+      });
+    });
+
+    // Helpers
+    function showStep(step) {
+      [step1, step2, step3, stepRegistered].forEach(s => s.classList.remove('active'));
+      step.classList.add('active');
+    }
+
+    function showError(el, msg) {
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function hideError(el) {
+      el.style.display = 'none';
+    }
+
+    // Enter key support
+    emailInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') verifyBtn.click();
+    });
+
+    usernameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !createBtn.disabled) createBtn.click();
+    });
+  </script>
+</body>
+</html>

@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# ideen (work in progress)
+docs/ideen/
+
 # macOS-specific files
 .DS_Store
 
