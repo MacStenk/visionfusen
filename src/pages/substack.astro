@@ -473,7 +473,7 @@ export const prerender = true;
       </div>
 
       <div class="qr-container">
-        <canvas id="qrcode"></canvas>
+        <div id="qrcode"></div>
       </div>
 
       <details class="details-box">
@@ -524,7 +524,7 @@ export const prerender = true;
           </div>
         </div>
         <div class="qr-container">
-          <canvas id="existingQrcode"></canvas>
+          <div id="existingQrcode"></div>
         </div>
         <details class="details-box">
           <summary>Oder Link manuell kopieren</summary>
@@ -551,7 +551,7 @@ export const prerender = true;
   </footer>
 
   <!-- QR Code Library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <script>
     const API_URL = 'https://visionfusen-substackabos.stevennoack2015.workers.dev';
@@ -614,12 +614,11 @@ export const prerender = true;
             document.getElementById('existingQrSection').style.display = 'block';
             document.getElementById('noQrHint').style.display = 'none';
             if (typeof QRCode !== 'undefined') {
-              QRCode.toCanvas(
-                document.getElementById('existingQrcode'),
-                data.lndhub_admin,
-                { width: 240, margin: 2 },
-                (err) => { if (err) console.error(err); }
-              );
+              new QRCode(document.getElementById('existingQrcode'), {
+                text: data.lndhub_admin,
+                width: 240,
+                height: 240
+              });
             }
           }
           
@@ -749,12 +748,11 @@ export const prerender = true;
 
         // Generate QR Code
         if (typeof QRCode !== 'undefined') {
-          QRCode.toCanvas(
-            document.getElementById('qrcode'),
-            data.lndhub_admin,
-            { width: 240, margin: 2 },
-            (err) => { if (err) console.error(err); }
-          );
+          new QRCode(document.getElementById('qrcode'), {
+            text: data.lndhub_admin,
+            width: 240,
+            height: 240
+          });
         }
 
         showStep(step3);
