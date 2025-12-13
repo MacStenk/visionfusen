@@ -613,28 +613,34 @@ export const prerender = true;
             document.getElementById('existingLndhubUrl').textContent = data.lndhub_admin;
             document.getElementById('existingQrSection').style.display = 'block';
             document.getElementById('noQrHint').style.display = 'none';
-            QRCode.toCanvas(
-              document.getElementById('existingQrcode'),
-              data.lndhub_admin,
-              { width: 240, margin: 2 },
-              (err) => { if (err) console.error(err); }
-            );
+            if (typeof QRCode !== 'undefined') {
+              QRCode.toCanvas(
+                document.getElementById('existingQrcode'),
+                data.lndhub_admin,
+                { width: 240, margin: 2 },
+                (err) => { if (err) console.error(err); }
+              );
+            }
           }
           
           showStep(stepRegistered);
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = 'Weiter';
           return;
         }
 
         // Success - go to step 2
         currentEmail = email;
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = 'Weiter';
         showStep(step2);
 
       } catch (err) {
+        console.error('Verify error:', err);
         showError(error1, 'Verbindungsfehler. Bitte versuche es später noch einmal.');
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = 'Weiter';
       }
-
-      verifyBtn.disabled = false;
-      verifyBtn.textContent = 'Weiter';
     });
 
     // Username input - live check
@@ -742,12 +748,14 @@ export const prerender = true;
         document.getElementById('lndhubUrl').textContent = data.lndhub_admin;
 
         // Generate QR Code
-        QRCode.toCanvas(
-          document.getElementById('qrcode'),
-          data.lndhub_admin,
-          { width: 240, margin: 2 },
-          (err) => { if (err) console.error(err); }
-        );
+        if (typeof QRCode !== 'undefined') {
+          QRCode.toCanvas(
+            document.getElementById('qrcode'),
+            data.lndhub_admin,
+            { width: 240, margin: 2 },
+            (err) => { if (err) console.error(err); }
+          );
+        }
 
         showStep(step3);
 
