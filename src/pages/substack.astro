@@ -473,7 +473,7 @@ export const prerender = true;
       </div>
 
       <div class="qr-container">
-        <canvas id="qrcode"></canvas>
+        <img id="qrcode" alt="QR Code" style="width: 240px; height: 240px;" />
       </div>
 
       <details class="details-box">
@@ -524,7 +524,7 @@ export const prerender = true;
           </div>
         </div>
         <div class="qr-container">
-          <canvas id="existingQrcode"></canvas>
+          <img id="existingQrcode" alt="QR Code" style="width: 240px; height: 240px;" />
         </div>
         <details class="details-box">
           <summary>Oder Link manuell kopieren</summary>
@@ -550,8 +550,7 @@ export const prerender = true;
     <a href="/">← zurück zu VisionFusen</a>
   </footer>
 
-  <!-- QR Code Library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <!-- QR Code wird inline generiert -->
 
   <script>
     const API_URL = 'https://visionfusen-substackabos.stevennoack2015.workers.dev';
@@ -613,13 +612,9 @@ export const prerender = true;
             document.getElementById('existingLndhubUrl').textContent = data.lndhub_admin;
             document.getElementById('existingQrSection').style.display = 'block';
             document.getElementById('noQrHint').style.display = 'none';
-            if (typeof QRious !== 'undefined') {
-              new QRious({
-                element: document.getElementById('existingQrcode'),
-                value: data.lndhub_admin,
-                size: 240
-              });
-            }
+            // QR Code via API generieren
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(data.lndhub_admin)}`;
+            document.getElementById('existingQrcode').src = qrUrl;
           }
           
           showStep(stepRegistered);
@@ -746,14 +741,9 @@ export const prerender = true;
         document.getElementById('lightningAddress').textContent = data.lightning_address;
         document.getElementById('lndhubUrl').textContent = data.lndhub_admin;
 
-        // Generate QR Code
-        if (typeof QRious !== 'undefined') {
-          new QRious({
-            element: document.getElementById('qrcode'),
-            value: data.lndhub_admin,
-            size: 240
-          });
-        }
+        // Generate QR Code via API
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(data.lndhub_admin)}`;
+        document.getElementById('qrcode').src = qrUrl;
 
         showStep(step3);
 
