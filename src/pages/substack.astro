@@ -497,7 +497,47 @@ export const prerender = true;
       <div class="result-box highlight">
         <p id="existingAddress" class="result-value large"></p>
       </div>
-      <p class="intro">
+      
+      <div id="existingQrSection" style="display: none;">
+        <div class="divider"></div>
+        <h2>So richtest du dein Wallet ein</h2>
+        <div class="steps-list">
+          <div class="step-item">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <strong>BlueWallet herunterladen</strong>
+              <p>Kostenlos für <a href="https://apps.apple.com/app/bluewallet-bitcoin-wallet/id1376878040" target="_blank">iOS</a> und <a href="https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet" target="_blank">Android</a></p>
+            </div>
+          </div>
+          <div class="step-item">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <strong>Wallet importieren</strong>
+              <p>Nicht "Erstellen" – klicke auf <strong>"Importieren"</strong></p>
+            </div>
+          </div>
+          <div class="step-item">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <strong>QR-Code scannen oder Link einfügen</strong>
+            </div>
+          </div>
+        </div>
+        <div class="qr-container">
+          <canvas id="existingQrcode"></canvas>
+        </div>
+        <details class="details-box">
+          <summary>Oder Link manuell kopieren</summary>
+          <p class="result-value mono" id="existingLndhubUrl"></p>
+          <button id="existingCopyBtn" class="copy-btn" type="button">In Zwischenablage kopieren</button>
+        </details>
+        <div class="message info">
+          <strong>Wichtig:</strong> Dieser Link ist dein Zugangsschlüssel. 
+          Speichere ihn sicher ab – wer ihn hat, hat Zugriff auf dein Wallet.
+        </div>
+      </div>
+      
+      <p id="noQrHint" class="intro">
         Öffne BlueWallet auf deinem Handy – dort findest du dein Wallet.
       </p>
       <p class="intro subtle">
@@ -567,6 +607,20 @@ export const prerender = true;
 
         if (data.already_registered) {
           document.getElementById('existingAddress').textContent = `${data.username}@visionfusen.org`;
+          
+          // Falls LndHub URL vorhanden, QR-Code anzeigen
+          if (data.lndhub_admin) {
+            document.getElementById('existingLndhubUrl').textContent = data.lndhub_admin;
+            document.getElementById('existingQrSection').style.display = 'block';
+            document.getElementById('noQrHint').style.display = 'none';
+            QRCode.toCanvas(
+              document.getElementById('existingQrcode'),
+              data.lndhub_admin,
+              { width: 240, margin: 2 },
+              (err) => { if (err) console.error(err); }
+            );
+          }
+          
           showStep(stepRegistered);
           return;
         }
@@ -705,12 +759,21 @@ export const prerender = true;
       }
     });
 
-    // Copy button
+    // Copy buttons
     copyBtn.addEventListener('click', () => {
       const url = document.getElementById('lndhubUrl').textContent;
       navigator.clipboard.writeText(url).then(() => {
         copyBtn.textContent = 'Kopiert!';
-        setTimeout(() => { copyBtn.textContent = 'Kopieren'; }, 2000);
+        setTimeout(() => { copyBtn.textContent = 'In Zwischenablage kopieren'; }, 2000);
+      });
+    });
+
+    const existingCopyBtn = document.getElementById('existingCopyBtn');
+    existingCopyBtn.addEventListener('click', () => {
+      const url = document.getElementById('existingLndhubUrl').textContent;
+      navigator.clipboard.writeText(url).then(() => {
+        existingCopyBtn.textContent = 'Kopiert!';
+        setTimeout(() => { existingCopyBtn.textContent = 'In Zwischenablage kopieren'; }, 2000);
       });
     });
 
