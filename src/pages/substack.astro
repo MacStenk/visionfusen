@@ -632,6 +632,29 @@ export const prerender = true;
     }
 
     // Step 2: Create Wallet
+    async function createWalletWithRetry(email, username, retries = 2) {
+      for (let i = 0; i <= retries; i++) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+          const res = await fetch(`${API_URL}/create-wallet`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, username }),
+            signal: controller.signal
+          });
+
+          clearTimeout(timeoutId);
+          return await res.json();
+        } catch (err) {
+          console.error(`Attempt ${i + 1} failed:`, err);
+          if (i === retries) throw err;
+          await new Promise(r => setTimeout(r, 1000)); // 1 Sekunde warten vor Retry
+        }
+      }
+    }
+
     createBtn.addEventListener('click', async () => {
       const username = usernameInput.value.trim().toLowerCase();
       
@@ -645,15 +668,15 @@ export const prerender = true;
       hideError(error2);
 
       try {
-        const res = await fetch(`${API_URL}/create-wallet`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: currentEmail, username })
-        });
-
-        const data = await res.json();
+        const data = await createWalletWithRetry(currentEmail, username);
 
         if (!data.success) {
+          // Wallet wurde vielleicht schon erstellt?
+          if (data.error === 'Wallet bereits erstellt' && data.username) {
+            document.getElementById('existingAddress').textContent = `${data.username}@visionfusen.org`;
+            showStep(stepRegistered);
+            return;
+          }
           showError(error2, data.error || 'Wallet konnte nicht erstellt werden.');
           createBtn.disabled = false;
           createBtn.textContent = 'Wallet erstellen';
@@ -675,7 +698,8 @@ export const prerender = true;
         showStep(step3);
 
       } catch (err) {
-        showError(error2, 'Verbindungsfehler. Bitte versuche es später noch einmal.');
+        console.error('Create wallet error:', err);
+        showError(error2, 'Das hat gerade nicht geklappt. Bitte klicke nochmal auf "Wallet erstellen".');
         createBtn.disabled = false;
         createBtn.textContent = 'Wallet erstellen';
       }
